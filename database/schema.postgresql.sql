@@ -216,3 +216,32 @@ CREATE INDEX IF NOT EXISTS idx_password_reset_account
     ON password_reset_tokens(account_type, account_id);
 CREATE INDEX IF NOT EXISTS idx_password_reset_expiry
     ON password_reset_tokens(expires_at);
+-- SECURITY HARDENING: PRIVATE BACKEND-ONLY TABLES
+-- The FastAPI backend connects directly as the PostgreSQL owner.
+-- No Supabase Data API client roles receive access to these tables.
+
+ALTER TABLE public.admins ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.customers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.technicians ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.vehicles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.parts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.estimates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.estimate_parts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.invoice_parts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.password_reset_tokens ENABLE ROW LEVEL SECURITY;
+
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public
+    FROM anon, authenticated, service_role;
+
+REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public
+    FROM anon, authenticated, service_role;
+
+-- Keep future tables and identity sequences private by default.
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
+    REVOKE ALL ON TABLES FROM anon, authenticated, service_role;
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
+    REVOKE ALL ON SEQUENCES FROM anon, authenticated, service_role;
