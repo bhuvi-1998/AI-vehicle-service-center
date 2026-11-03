@@ -134,7 +134,7 @@ def get_last_insert_id(connection, cursor, table_name, id_column):
         raise ValueError("Unsupported table or ID column for generated ID lookup.")
 
     cursor.execute(
-        "SELECT currval(pg_get_serial_sequence(%s, %s)) AS inserted_id",
+        "SELECT currval(pg_get_serial_sequence(%s, %s)::regclass) AS inserted_id",
         (table_name, id_column),
     )
 
