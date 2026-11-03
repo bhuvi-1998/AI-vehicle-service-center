@@ -148,7 +148,7 @@ def request_password_reset(request: PasswordResetRequest):
                     """
                     SELECT customer_id AS account_id
                     FROM customers
-                    WHERE email = %s AND email_verified = 1
+                    WHERE email = %s AND email_verified = TRUE
                     """,
                     (email,)
                 )
@@ -317,7 +317,7 @@ def complete_password_reset(request: PasswordResetComplete):
                     UPDATE customers
                     SET password_hash = %s
                     WHERE customer_id = %s
-                      AND email_verified = 1
+                      AND email_verified = TRUE
                     """,
                     (
                         password_hash,

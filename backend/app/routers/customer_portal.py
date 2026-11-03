@@ -3,9 +3,12 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from pymysql.err import IntegrityError
 
-from backend.app.database.database import get_connection
+from backend.app.database.database import (
+    get_connection,
+    get_last_insert_id,
+    INTEGRITY_ERRORS,
+)
 from backend.app.security import get_current_customer
 
 router = APIRouter(
@@ -81,7 +84,7 @@ def add_my_vehicle(
                 )
             )
 
-            vehicle_id = cursor.lastrowid
+            vehicle_id = get_last_insert_id(connection, cursor, "vehicles", "vehicle_id")
 
         connection.commit()
 
@@ -90,7 +93,7 @@ def add_my_vehicle(
             "vehicle_id": vehicle_id
         }
 
-    except IntegrityError:
+    except INTEGRITY_ERRORS:
         connection.rollback()
 
         raise HTTPException(
@@ -234,7 +237,7 @@ def book_my_service(
                 )
             )
 
-            appointment_id = cursor.lastrowid
+            appointment_id = get_last_insert_id(connection, cursor, "appointments", "appointment_id")
 
         connection.commit()
 

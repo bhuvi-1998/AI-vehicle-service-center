@@ -1,4 +1,4 @@
-from backend.app.database.database import get_connection
+from backend.app.database.database import get_connection, get_last_insert_id
 
 
 def create_service(service):
@@ -24,7 +24,7 @@ def create_service(service):
                 ),
             )
 
-            service_id = cursor.lastrowid
+            service_id = get_last_insert_id(connection, cursor, "services", "service_id")
 
         connection.commit()
         return service_id

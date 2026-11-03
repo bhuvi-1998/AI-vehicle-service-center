@@ -1,4 +1,4 @@
-from backend.app.database.database import get_connection
+from backend.app.database.database import get_connection, get_last_insert_id
 
 
 def create_customer(customer):
@@ -24,7 +24,7 @@ def create_customer(customer):
                 )
             )
 
-            customer_id = cursor.lastrowid
+            customer_id = get_last_insert_id(connection, cursor, "customers", "customer_id")
 
         connection.commit()
 

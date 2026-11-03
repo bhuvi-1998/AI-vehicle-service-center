@@ -1,4 +1,4 @@
-from backend.app.database.database import get_connection
+from backend.app.database.database import get_connection, get_last_insert_id
 
 
 def create_vehicle(vehicle):
@@ -28,7 +28,7 @@ def create_vehicle(vehicle):
                 ),
             )
 
-            vehicle_id = cursor.lastrowid
+            vehicle_id = get_last_insert_id(connection, cursor, "vehicles", "vehicle_id")
 
         connection.commit()
         return vehicle_id

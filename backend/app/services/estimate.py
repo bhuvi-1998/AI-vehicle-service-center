@@ -1,6 +1,10 @@
 from decimal import Decimal, ROUND_HALF_UP
 
-from backend.app.database.database import get_connection
+from backend.app.database.database import (
+    begin_transaction,
+    get_connection,
+    get_last_insert_id,
+)
 
 
 def money(value):
@@ -15,7 +19,7 @@ def create_estimate(data):
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
 
@@ -117,7 +121,7 @@ def create_estimate(data):
                 )
             )
 
-            estimate_id = cursor.lastrowid
+            estimate_id = get_last_insert_id(connection, cursor, "estimates", "estimate_id")
 
             for part in selected_parts:
 

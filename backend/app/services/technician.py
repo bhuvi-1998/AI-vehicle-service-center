@@ -1,4 +1,4 @@
-from backend.app.database.database import get_connection
+from backend.app.database.database import get_connection, get_last_insert_id
 
 
 def create_technician(technician):
@@ -26,7 +26,7 @@ def create_technician(technician):
                 ),
             )
 
-            technician_id = cursor.lastrowid
+            technician_id = get_last_insert_id(connection, cursor, "technicians", "technician_id")
 
         connection.commit()
         return technician_id

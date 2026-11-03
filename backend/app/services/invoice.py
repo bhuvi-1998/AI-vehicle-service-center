@@ -1,6 +1,10 @@
 from decimal import Decimal, ROUND_HALF_UP
 
-from backend.app.database.database import get_connection
+from backend.app.database.database import (
+    begin_transaction,
+    get_connection,
+    get_last_insert_id,
+)
 
 
 def money(value):
@@ -15,7 +19,7 @@ def create_invoice(data):
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
 
@@ -158,7 +162,7 @@ def create_invoice(data):
                 )
             )
 
-            invoice_id = cursor.lastrowid
+            invoice_id = get_last_insert_id(connection, cursor, "invoices", "invoice_id")
 
             # Save part details and deduct the actual stock used.
             for part in selected_parts:
@@ -332,7 +336,7 @@ def mark_invoice_paid(invoice_id, payment_method):
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
 

@@ -1,8 +1,11 @@
 
 from fastapi import APIRouter, HTTPException, Depends
-from pymysql.err import IntegrityError
 
-from backend.app.database.database import get_connection
+from backend.app.database.database import (
+    get_connection,
+    get_last_insert_id,
+    INTEGRITY_ERRORS,
+)
 from backend.app.schemas.admin import (
     AdminCreate,
     AdminLogin,
@@ -63,7 +66,7 @@ def create_admin(admin: AdminCreate):
                 (admin_name, email, password_hash, "admin"),
             )
 
-            admin_id = cursor.lastrowid
+            admin_id = get_last_insert_id(connection, cursor, "admins", "admin_id")
 
         connection.commit()
 
@@ -76,7 +79,7 @@ def create_admin(admin: AdminCreate):
         connection.rollback()
         raise
 
-    except IntegrityError:
+    except INTEGRITY_ERRORS:
         connection.rollback()
         raise HTTPException(
             status_code=409,
@@ -255,7 +258,7 @@ def update_admin_profile(
         connection.rollback()
         raise
 
-    except IntegrityError:
+    except INTEGRITY_ERRORS:
         connection.rollback()
 
         raise HTTPException(

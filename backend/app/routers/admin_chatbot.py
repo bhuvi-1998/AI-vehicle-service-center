@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 from backend.app.security import get_current_admin
 from backend.app.schemas.appointment import RepairStatus
-from backend.app.database.database import get_connection
+from backend.app.database.database import begin_transaction, get_connection
 
 from backend.app.services.appointment import get_all_appointments
 from backend.app.services.customer import get_all_customers
@@ -628,7 +628,7 @@ def update_admin_appointment_status(
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
 
@@ -739,7 +739,7 @@ def assign_admin_appointment_technician(
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
             cursor.execute(
@@ -1035,7 +1035,7 @@ def adjust_admin_part_stock(
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
             cursor.execute(
@@ -1117,7 +1117,7 @@ def reschedule_admin_appointment(
     connection = get_connection()
 
     try:
-        connection.begin()
+        begin_transaction(connection)
 
         with connection.cursor() as cursor:
             cursor.execute(

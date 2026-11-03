@@ -1,4 +1,4 @@
-from backend.app.database.database import get_connection
+from backend.app.database.database import get_connection, get_last_insert_id
 
 
 def create_part(part):
@@ -26,7 +26,7 @@ def create_part(part):
                 ),
             )
 
-            part_id = cursor.lastrowid
+            part_id = get_last_insert_id(connection, cursor, "parts", "part_id")
 
         connection.commit()
         return part_id

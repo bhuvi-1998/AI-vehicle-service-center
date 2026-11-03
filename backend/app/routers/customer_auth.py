@@ -4,9 +4,12 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from pymysql.err import IntegrityError
 
-from backend.app.database.database import get_connection
+from backend.app.database.database import (
+    get_connection,
+    get_last_insert_id,
+    INTEGRITY_ERRORS,
+)
 from backend.app.rate_limit import rate_limit
 from backend.app.schemas.customer_auth import (
     CustomerRegister,
@@ -55,7 +58,7 @@ def clear_verification_token(token_hash: str) -> None:
                 SET verification_token_hash = NULL,
                     verification_expires_at = NULL
                 WHERE verification_token_hash = %s
-                  AND email_verified = 0
+                  AND email_verified = FALSE
                 """,
                 (token_hash,),
             )
@@ -112,7 +115,7 @@ def register_customer(customer: CustomerRegister):
                         verification_token_hash,
                         verification_expires_at
                     )
-                VALUES (%s, %s, %s, %s, %s, 0, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, FALSE, %s, %s)
                 """,
                 (
                     customer_name,
@@ -125,11 +128,11 @@ def register_customer(customer: CustomerRegister):
                 ),
             )
 
-            customer_id = cursor.lastrowid
+            customer_id = get_last_insert_id(connection, cursor, "customers", "customer_id")
 
         connection.commit()
 
-    except IntegrityError:
+    except INTEGRITY_ERRORS:
         connection.rollback()
 
         raise HTTPException(
@@ -200,11 +203,11 @@ def verify_customer_email(request: VerifyEmailRequest):
             cursor.execute(
                 """
                 UPDATE customers
-                SET email_verified = 1,
+                SET email_verified = TRUE,
                     verification_token_hash = NULL,
                     verification_expires_at = NULL
                 WHERE verification_token_hash = %s
-                  AND email_verified = 0
+                  AND email_verified = FALSE
                   AND verification_expires_at > %s
                 """,
                 (token_hash, datetime.now()),
@@ -277,7 +280,7 @@ def resend_verification(request: ResendVerificationRequest):
                     SET verification_token_hash = %s,
                         verification_expires_at = %s
                     WHERE customer_id = %s
-                      AND email_verified = 0
+                      AND email_verified = FALSE
                     """,
                     (
                         token_hash,
@@ -520,7 +523,7 @@ def update_customer_profile(
 
             if email_changed:
                 updates.extend([
-                    "email_verified = 0",
+                    "email_verified = FALSE",
                     "verification_token_hash = %s",
                     "verification_expires_at = %s"
                 ])
@@ -542,7 +545,7 @@ def update_customer_profile(
 
         connection.commit()
 
-    except IntegrityError:
+    except INTEGRITY_ERRORS:
         connection.rollback()
 
         raise HTTPException(
