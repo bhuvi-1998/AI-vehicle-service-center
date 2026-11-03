@@ -2096,7 +2096,7 @@
     function parseAdminStockRequest(query) {
 
         const match = query.match(
-            /\b(add|increase|remove|decrease)\s+(\d+)\s*(?:units?|pieces?)?\s+(?:to|from)\s+(?:part|item)\s*#?(\d+)\b/
+            /\b(add|increase|remove|decrease)\s+(\d+)\s*(?:units?|pieces?)?\s+(?:(?:stock|inventory)\s+)?(?:to|from)\s+(?:(?:stock|inventory)\s+of\s+)?(?:part|item)\s*#?(\d+)\b/
         );
 
         if (!match) {
