@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Vehicle Service Center administration and management homepage."
+    >
+
+    <title>Vehicle Service Center | Admin Home</title>
+
+    <style>
+        :root {
+            --background: #17191D;
+            --card: #252A31;
+            --card-hover: #30363F;
+            --orange: #F36B21;
+            --orange-hover: #D95512;
+            --white: #F5F5F5;
+            --muted: #B8BEC7;
+            --border: #3A414B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--white);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1150px, 92%);
+            margin: auto;
+        }
+
+        /* Header */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #1C1F24;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-mark {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--orange);
+            color: white;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .brand-name {
+            display: block;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .brand-name span {
+            color: var(--orange);
+        }
+
+        .brand-subtitle {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-link {
+            padding: 10px 16px;
+            border: 1px solid var(--orange);
+            border-radius: 7px;
+            color: var(--orange);
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .header-link:hover {
+            background: var(--orange);
+            color: white;
+        }
+
+        /* Buttons */
+
+        .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .button-orange {
+            background: var(--orange);
+            color: white;
+        }
+
+        .button-orange:hover {
+            background: var(--orange-hover);
+            transform: translateY(-2px);
+        }
+
+        .button-outline {
+            border-color: var(--border);
+            color: var(--white);
+        }
+
+        .button-outline:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        /* Hero */
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 45px;
+            padding-top: 75px;
+            padding-bottom: 75px;
+        }
+
+        .eyebrow {
+            color: var(--orange);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .hero h1 {
+            margin: 16px 0;
+            font-size: clamp(36px, 5vw, 57px);
+            line-height: 1.12;
+        }
+
+        .hero h1 span {
+            color: var(--orange);
+        }
+
+        .hero-description {
+            max-width: 580px;
+            color: var(--muted);
+            font-size: 16px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 27px;
+        }
+
+        .hero-panel {
+            padding: 28px;
+            background: linear-gradient(145deg, #30363F, #202329);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .panel-label {
+            color: var(--orange);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .workshop-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 170px;
+            margin: 20px 0;
+            background: #1A1D22;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 75px;
+        }
+
+        .hero-panel h2 {
+            margin: 12px 0 5px;
+            font-size: 21px;
+        }
+
+        .hero-panel p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* Management links */
+
+        .management-section {
+            padding: 60px 0;
+            background: #1C1F24;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-heading {
+            margin-bottom: 28px;
+        }
+
+        .section-heading h2 {
+            margin: 8px 0;
+            font-size: clamp(27px, 4vw, 36px);
+        }
+
+        .section-heading p:last-child {
+            color: var(--muted);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .module-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+            padding: 21px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            transition: 0.2s;
+        }
+
+        .module-card:hover {
+            background: var(--card-hover);
+            border-color: var(--orange);
+            transform: translateY(-3px);
+        }
+
+        .module-icon {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(243, 107, 33, 0.13);
+            border-radius: 9px;
+            color: #FF8A4C;
+            font-size: 23px;
+        }
+
+        .module-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .module-info strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .module-info small {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .module-arrow {
+            color: var(--orange);
+            font-size: 21px;
+        }
+
+        /* Services */
+
+        .services-section {
+            padding-top: 60px;
+            padding-bottom: 65px;
+        }
+
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            padding: 0;
+            margin: 25px 0 0;
+            list-style: none;
+        }
+
+        .service-list li {
+            padding: 17px 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .service-list li::before {
+            content: "✓";
+            display: block;
+            margin-bottom: 8px;
+            color: var(--orange);
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+
+        footer {
+            padding: 25px 0;
+            background: #1C1F24;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-content p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Focus accessibility */
+
+        a:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 4px;
+        }
+
+        /* Tablet */
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .hero-panel {
+                max-width: 600px;
+            }
+
+            .module-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .service-list {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-top: 14px;
+                padding-bottom: 14px;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-link {
+                text-align: center;
+            }
+
+            .hero {
+                padding-top: 38px;
+                padding-bottom: 38px;
+            }
+
+            .hero h1 {
+                font-size: 37px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hero-actions .button {
+                width: 100%;
+            }
+
+            .hero-panel {
+                padding: 19px;
+            }
+
+            .management-section,
+            .services-section {
+                padding-top: 42px;
+                padding-bottom: 42px;
+            }
+
+            .module-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .service-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="container header-content">
+
+            <a class="brand" href="index.html">
+                <span class="brand-mark">VS</span>
+
+                <span>
+                    <span class="brand-name">
+                        VEHICLE <span>SERVICE</span>
+                    </span>
+
+                    <span class="brand-subtitle">
+                        SERVICE CENTER MANAGEMENT
+                    </span>
+                </span>
+            </a>
+
+            <div class="header-actions">
+                <a class="header-link" href="pages/login.html">
+                    Admin Login
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="container hero">
+
+            <div class="hero-content">
+
+                <p class="eyebrow">VEHICLE SERVICE CENTER</p>
+
+                <h1>
+                    Manage Your Workshop.
+                    <span>Drive Better Service.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Manage customer records, vehicles, appointments,
+                    technicians, services, spare parts, estimates,
+                    invoices, and payments from one central workspace.
+                </p>
+
+                <div class="hero-actions">
+
+                    <a class="button button-orange" href="pages/login.html">
+                        Sign In as Admin <span aria-hidden="true">&rarr;</span>
+                    </a>
+
+                    <a class="button button-outline" href="#management">
+                        Explore Management Links
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="hero-panel">
+
+                <span class="panel-label">ADMIN WORKSPACE</span>
+
+                <div class="workshop-icon" aria-hidden="true">
+                    🔧
+                </div>
+
+                <h2>Everything in One Place</h2>
+
+                <p>
+                    Sign in to access your authorized management pages
+                    and maintain your service center records.
+                </p>
+
+            </div>
+
+        </section>
+
+        <section class="management-section" id="management">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <p class="eyebrow">QUICK ACCESS</p>
+
+                    <h2>Management Center</h2>
+
+                    <p>
+                        Sign in as an administrator before accessing
+                        protected management functions.
+                    </p>
+
+                </div>
+
+                <div class="module-grid">
+
+                    <a class="module-card" href="pages/admin.html">
+                        <span class="module-icon">⌂</span>
+                        <span class="module-info">
+                            <strong>Admin Dashboard</strong>
+                            <small>Open the management workspace</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/customer.html">
+                        <span class="module-icon">♙</span>
+                        <span class="module-info">
+                            <strong>Customers</strong>
+                            <small>Manage customer records</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/vehicle.html">
+                        <span class="module-icon">🚘</span>
+                        <span class="module-info">
+                            <strong>Vehicles</strong>
+                            <small>Manage registered vehicles</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/appointment.html">
+                        <span class="module-icon">▦</span>
+                        <span class="module-info">
+                            <strong>Appointments</strong>
+                            <small>Manage service bookings</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/service.html">
+                        <span class="module-icon">⚙</span>
+                        <span class="module-info">
+                            <strong>Services</strong>
+                            <small>Manage service offerings</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/technician.html">
+                        <span class="module-icon">🔧</span>
+                        <span class="module-info">
+                            <strong>Technicians</strong>
+                            <small>Manage workshop staff</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/parts.html">
+                        <span class="module-icon">⚙</span>
+                        <span class="module-info">
+                            <strong>Spare Parts</strong>
+                            <small>Manage inventory and stock</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/estimate.html">
+                        <span class="module-icon">▤</span>
+                        <span class="module-info">
+                            <strong>Estimates</strong>
+                            <small>Create estimates and PDFs</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                    <a class="module-card" href="pages/invoice.html">
+                        <span class="module-icon">₹</span>
+                        <span class="module-info">
+                            <strong>Invoices</strong>
+                            <small>Manage bills and payments</small>
+                        </span>
+                        <span class="module-arrow">&rarr;</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="container services-section">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">SERVICE OVERVIEW</p>
+
+                <h2>Vehicle Care Services</h2>
+
+                <p>
+                    Common service areas managed by your service center.
+                    Maintain the actual service offerings in Service Management.
+                </p>
+
+            </div>
+
+            <ul class="service-list">
+                <li>Vehicle Service</li>
+                <li>Oil Change</li>
+                <li>Engine Repair</li>
+                <li>Brake Service</li>
+                <li>Vehicle Inspection</li>
+            </ul>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+
+            <p>
+                &copy; 2026 Vehicle Service Center
+            </p>
+
+            <p>
+                Administration Workspace
+            </p>
+
+        </div>
+    </footer>
+
+</body>
+</html>

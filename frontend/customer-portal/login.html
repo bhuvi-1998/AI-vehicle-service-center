@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Login | VehicleCare</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="auth-body">
+
+    <header class="site-header">
+
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="register.html">Create Account</a>
+        </nav>
+
+    </header>
+
+    <main class="auth-layout">
+
+        <section class="auth-card">
+
+            <p class="eyebrow">WELCOME BACK</p>
+            <h1>Customer Login</h1>
+
+            <p class="auth-description">
+                Sign in to manage your vehicles and service appointments.
+            </p>
+
+            <form id="loginForm" class="auth-form">
+
+                <label class="auth-field">
+                    Email Address
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        name="email"
+                        required
+                        autocomplete="email"
+                    >
+                </label>
+
+                <label class="auth-field">
+                    Password
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        name="password"
+                        required
+                        autocomplete="current-password"
+                    >
+                </label>
+
+                <button
+                    type="submit"
+                    class="auth-primary-button"
+                >
+                    Log In
+                </button>
+
+                <p
+                    id="loginMessage"
+                    class="auth-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+            </form>
+
+            <p class="auth-footer">
+                <a href="forgot-password.html">Forgot Password?</a>
+            </p>
+
+            <section class="auth-form" style="margin-top: 28px;">
+
+                <h2>Didn't receive the verification email?</h2>
+
+                <form id="resendVerificationForm" class="auth-form">
+
+                    <label class="auth-field">
+                        Email Address
+
+                        <input
+                            type="email"
+                            id="resendEmail"
+                            required
+                            maxlength="254"
+                            autocomplete="email"
+                        >
+                    </label>
+
+                    <button
+                        type="submit"
+                        class="auth-primary-button"
+                    >
+                        Resend Verification Email
+                    </button>
+
+                    <p
+                        id="resendMessage"
+                        class="auth-message"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </section>
+
+            <p class="auth-footer">
+                Don't have an account?
+                <a href="register.html">Create one here</a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <script src="js/auth.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Management</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+
+    <h1>Customer Management</h1>
+
+    <h2>Customer Details</h2>
+
+    <form id="customerForm">
+
+        <input type="hidden" id="customer_id">
+
+        <label for="customer_name">
+            Customer Name:
+        </label>
+
+        <br>
+
+        <input
+            type="text"
+            id="customer_name"
+            required
+        >
+
+        <br><br>
+
+        <label for="phone">
+            Phone Number:
+        </label>
+
+        <br>
+
+        <input
+            type="tel"
+            id="phone"
+            required
+        >
+
+        <br><br>
+
+        <label for="email">
+            Email:
+        </label>
+
+        <br>
+
+        <input
+            type="email"
+            id="email"
+        >
+
+        <br><br>
+
+        <label for="address">
+            Address:
+        </label>
+
+        <br>
+
+        <textarea
+            id="address"
+            rows="4"
+            cols="30"
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Save Customer
+        </button>
+
+        <button
+            type="button"
+            id="cancelButton"
+            hidden
+        >
+            Cancel
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <hr>
+
+    <h2>Customers</h2>
+
+    <table border="1">
+
+        <thead>
+
+            <tr>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="customerTable">
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <a href="admin.html">
+        Back to Admin
+    </a>
+
+
+    <script src="../js/api.js"></script>
+    <script src="../js/customer.js"></script>
+
+</body>
+
+</html>

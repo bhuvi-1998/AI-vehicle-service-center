@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | VehicleCare</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-body">
+
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="login.html">Customer Login</a>
+        </nav>
+    </header>
+
+    <main class="auth-layout">
+        <section class="auth-card">
+            <p class="eyebrow">WELCOME TO VEHICLECARE</p>
+            <h1>Create your account</h1>
+            <p class="auth-description">
+                Register to manage your vehicles and service appointments.
+            </p>
+
+            <form id="registerForm" class="auth-form">
+                <label class="auth-field">
+                    Full Name
+                    <input
+                        type="text"
+                        id="customerName"
+                        name="customer_name"
+                        required
+                        minlength="2"
+                        maxlength="100"
+                        autocomplete="name"
+                    >
+                </label>
+
+                <label class="auth-field">
+                    Phone Number
+                    <input
+                        type="tel"
+                        id="customerPhone"
+                        name="phone"
+                        required
+                        minlength="8"
+                        maxlength="15"
+                        autocomplete="tel"
+                    >
+                </label>
+
+                <label class="auth-field">
+                    Email Address
+                    <input
+                        type="email"
+                        id="customerEmail"
+                        name="email"
+                        required
+                        maxlength="254"
+                        autocomplete="email"
+                    >
+                </label>
+
+                <label class="auth-field">
+                    Password
+                    <input
+                        type="password"
+                        id="customerPassword"
+                        name="password"
+                        required
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="new-password"
+                    >
+                    <span class="field-hint">
+                        Use at least 8 characters.
+                    </span>
+                </label>
+
+                <label class="auth-field">
+                    Address (Optional)
+                    <textarea
+                        id="customerAddress"
+                        name="address"
+                        maxlength="255"
+                        rows="3"
+                        autocomplete="street-address"
+                    ></textarea>
+                </label>
+
+                <button type="submit" class="auth-primary-button">
+                    Create Account
+                </button>
+
+                <p
+                    id="registerMessage"
+                    class="auth-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </form>
+
+            <p class="auth-footer">
+                Already registered?
+                <a href="login.html">Log in here</a>
+            </p>
+        </section>
+    </main>
+
+    <script src="js/auth.js" defer></script>
+</body>
+</html>

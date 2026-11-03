@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Technician Management</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+
+    <h1>Technician Management</h1>
+
+    <form id="technicianForm">
+
+        <input type="hidden" id="technician_id">
+
+        <label for="technician_name">
+            Technician Name:
+        </label>
+        <br>
+
+        <input
+            type="text"
+            id="technician_name"
+            required
+        >
+
+        <br><br>
+
+        <label for="phone">
+            Phone Number:
+        </label>
+        <br>
+
+        <input
+            type="tel"
+            id="phone"
+            required
+        >
+
+        <br><br>
+
+        <label for="specialization">
+            Specialization:
+        </label>
+        <br>
+
+        <input
+            type="text"
+            id="specialization"
+        >
+
+        <br><br>
+
+        <label for="vehicle_type">
+            Vehicle Category:
+        </label>
+        <br>
+
+        <select
+            id="vehicle_type"
+            name="vehicle_type"
+            required
+        >
+            <option value="All">All</option>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Superbike">Superbike</option>
+        </select>
+
+        <br><br>
+
+        <label for="experience">
+            Experience:
+        </label>
+        <br>
+
+        <input
+            type="number"
+            id="experience"
+            min="0"
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Save Technician
+        </button>
+
+        <button
+            type="button"
+            id="cancelButton"
+            hidden
+        >
+            Cancel
+        </button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <hr>
+
+    <h2>Technicians</h2>
+
+    <table border="1">
+
+        <thead>
+
+            <tr>
+                <th>Technician ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Specialization</th>
+                <th>Vehicle Category</th>
+                <th>Experience</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+
+        <tbody id="technicianTable">
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <a href="admin.html">Back to Admin</a>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/technician.js"></script>
+
+</body>
+
+</html>

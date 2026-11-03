@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Explore vehicle maintenance and repair services offered by our service center."
+    >
+
+    <title>Our Services | VehicleCare</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="index.html">Home</a>
+            <a class="active" href="services.html">Services</a>
+            <a href="index.html#how-it-works">How It Works</a>
+            <a class="nav-login" href="login.html">Customer Login</a>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="hero services-hero">
+
+            <div class="hero-content">
+
+                <p class="eyebrow">VEHICLE CARE, MADE SIMPLE</p>
+
+                <h1>
+                    Services for Every
+                    <span class="gold-text">Journey.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Explore the services offered by our vehicle service
+                    center. Compare service descriptions and prices
+                    before planning your next visit.
+                </p>
+
+                <div class="hero-actions">
+
+                    <a
+                        class="button button-gold"
+                        href="#available-services"
+                    >
+                        Explore Services →
+                    </a>
+
+                    <a
+                        class="button button-outline"
+                        href="index.html"
+                    >
+                        Back to Home
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-panel">
+
+                <div class="panel-top">
+                    <span class="panel-label">OUR SERVICE PROMISE</span>
+                    <span class="panel-symbol">✦</span>
+                </div>
+
+                <div class="service-highlight">
+
+                    <span class="service-highlight-icon">01</span>
+
+                    <h2>Clear Service Information</h2>
+
+                    <p>
+                        Review the services and prices currently
+                        maintained by the service center.
+                    </p>
+
+                    <div class="service-highlight-line"></div>
+
+                    <span class="mini-label">
+                        INFORMATION FROM OUR SERVICE DATABASE
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="section" id="available-services">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">EXPLORE OUR CATALOG</p>
+
+                <h2>
+                    Our <span class="gold-text">Services.</span>
+                </h2>
+
+                <p>
+                    Browse the available services and find the
+                    information you need.
+                </p>
+
+            </div>
+
+
+            <div class="service-search-wrapper">
+
+                <label for="serviceSearch">
+                    Search services
+                </label>
+
+                <input
+                    type="search"
+                    id="serviceSearch"
+                    class="service-search"
+                    placeholder="Search by service name or description..."
+                >
+
+            </div>
+
+
+            <p
+                id="servicesStatus"
+                class="service-status"
+                role="status"
+                aria-live="polite"
+            >
+                Loading available services...
+            </p>
+
+
+            <div
+                id="servicesList"
+                class="service-catalog-grid"
+                aria-live="polite"
+            ></div>
+
+        </section>
+
+
+        <section class="cta-section">
+
+            <div>
+
+                <p class="eyebrow">YOUR NEXT VISIT</p>
+
+                <h2>Ready for your next service?</h2>
+
+                <p>
+                    Customer accounts and online service booking
+                    will be connected in the next development step.
+                </p>
+
+            </div>
+
+            <a class="button button-outline" href="index.html">
+                Return Home →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <footer class="site-footer">
+
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+
+        <p>Vehicle Service Center Customer Portal</p>
+
+        <p class="footer-small">
+            Prices and descriptions are displayed from the
+            service center's saved records.
+        </p>
+
+    </footer>
+
+
+    <script src="js/services.js"></script>
+
+</body>
+
+</html>

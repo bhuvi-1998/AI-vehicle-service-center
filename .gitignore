@@ -1,0 +1,36 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# VS Code settings
+.vscode/
+
+# Windows and macOS files
+Thumbs.db
+.DS_Store
+# Development backups
+*.backup_*
+
+# Local pre-change snapshots
+*.before_*
+
+# Temporary documentation generator
+/prepare_project_docs.py
+
+# All local backup copies
+*.backup*

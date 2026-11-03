@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track My Repair | VehicleCare</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tracking-container{max-width:1000px;margin:38px auto;padding:20px}
+        .tracking-search{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
+        .tracking-search input{flex:1;min-width:200px;padding:12px;border:1px solid #344963;border-radius:8px;background:#061326;color:white}
+        .tracking-card{background:#0A192F;border:1px solid #263B55;border-radius:12px;padding:22px;margin:18px 0;overflow-wrap:anywhere}
+        .tracking-card h2{color:#FFD700;margin-top:0}
+        .tracking-status{display:inline-block;background:#102746;border:1px solid #FFD700;border-radius:20px;padding:7px 14px;color:#FFD700;font-weight:bold}
+        .tracking-message{margin:20px 0;overflow-wrap:anywhere}
+        .tracking-button{padding:12px 18px;background:#FFD700;color:#020B18;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
+        .tracking-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px}
+
+/* Repair progress timeline */
+.tracking-progress {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #263B55;
+}
+
+.tracking-progress h3 {
+    color: #FFD700;
+    margin-bottom: 18px;
+}
+
+.progress-timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.progress-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 12px;
+    padding-bottom: 24px;
+}
+
+.progress-step:last-child {
+    padding-bottom: 0;
+}
+
+.progress-step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 26px;
+    bottom: 0;
+    width: 2px;
+    background: #344963;
+}
+
+.progress-step.is-complete:not(:last-child)::before {
+    background: #FFD700;
+}
+
+.progress-dot {
+    position: relative;
+    z-index: 1;
+    width: 26px;
+    height: 26px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #52657E;
+    background: #061326;
+    color: #020B18;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.progress-step.is-complete .progress-dot {
+    background: #FFD700;
+    border-color: #FFD700;
+}
+
+.progress-step.is-current .progress-dot {
+    border-color: #FFD700;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.14);
+}
+
+.progress-step.is-current .progress-title {
+    color: #FFD700;
+}
+
+.progress-title {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.progress-description {
+    display: block;
+    color: #AAB9CE;
+    font-size: 14px;
+    margin-top: 5px;
+    line-height: 1.5;
+}
+
+.tracking-cancelled {
+    color: #FF9999;
+    margin-top: 16px;
+}
+
+    </style>
+</head>
+<body class="auth-body">
+<header class="site-header">
+    <a class="brand" href="index.html">
+        <span class="brand-icon">VS</span>
+        <span>VEHICLE<span class="gold-text">CARE</span></span>
+    </a>
+    <nav class="main-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="book-service.html">Book Service</a>
+        <a href="my-appointments.html">My Appointments</a>
+    </nav>
+</header>
+
+<main class="tracking-container">
+    <p class="eyebrow">CUSTOMER PORTAL</p>
+    <h1>Track Your Repair</h1>
+    <p class="auth-description">
+        View the latest appointment and repair status recorded for your vehicles.
+    </p>
+
+    <form id="trackingSearch" class="tracking-search">
+        <input id="appointmentSearch" type="search"
+               placeholder="Search by appointment ID or vehicle number">
+        <button class="tracking-button" type="submit">Search</button>
+        <button class="tracking-button" type="button" id="showAllButton">Show All</button>
+    </form>
+
+    <p id="trackingMessage" class="tracking-message" role="status">
+        Loading your repair information...
+    </p>
+    <section id="trackingResults"></section>
+
+    <div class="tracking-links">
+        <a href="book-service.html">Book another service</a>
+        <a href="my-appointments.html">View all appointments</a>
+        <a href="dashboard.html">Return to dashboard</a>
+    </div>
+</main>
+<script src="js/tracking.js" defer></script>
+</body>
+</html>
