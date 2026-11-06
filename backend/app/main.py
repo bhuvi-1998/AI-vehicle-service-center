@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,17 +28,39 @@ from backend.app.routers.password_reset import (
 from backend.app.routers.chatbot_ai import router as chatbot_ai_router
 from backend.app.routers.admin_chatbot import router as admin_chatbot_router
 
-app = FastAPI()
+IS_PRODUCTION = (
+    os.getenv("APP_ENV", "development").strip().lower() == "production"
+)
 
+app = FastAPI(
+    docs_url=None if IS_PRODUCTION else "/docs",
+    redoc_url=None if IS_PRODUCTION else "/redoc",
+    openapi_url=None if IS_PRODUCTION else "/openapi.json",
+)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+# CORS origins:
+# Use CORS_ORIGINS in production as comma-separated frontend URLs.
+# If it is not configured, allow the local development addresses.
+local_origins = [
     "http://127.0.0.1:5503",
     "http://localhost:5503",
     "http://127.0.0.1:5500",
     "http://localhost:5500",
-    ],
+]
+
+configured_origins = [
+    origin.strip().rstrip("/")
+    for origin in os.getenv("CORS_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
+allowed_origins = configured_origins or local_origins
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
     allow_credentials=False,
     allow_methods=[
         "GET",

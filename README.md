@@ -1,8 +1,8 @@
-# Vehicle Service Center Management System
+# AI Vehicle Service Center
 
 A web-based application for managing vehicle service-center operations.
 It includes administrator and customer workflows, a FastAPI backend,
-a MySQL database, and chatbot functionality.
+a Supabase-hosted PostgreSQL database, with optional MySQL support, and chatbot functionality.
 
 ## Main Features
 
@@ -34,42 +34,47 @@ a MySQL database, and chatbot functionality.
 | Layer | Technology |
 |---|---|
 | Backend | Python, FastAPI |
-| Database | MySQL |
-| Database driver | PyMySQL |
+| Production database | PostgreSQL (Supabase) |
+| Database drivers | Psycopg 3 and PyMySQL |
 | Frontend | HTML, CSS, JavaScript |
 | Authentication | JWT |
-| AI assistant | Ollama, llama3.2:3b |
+| AI assistant | Ollama (local and cloud) |
 | PDF generation | ReportLab |
 | Email | SMTP |
 
 ## Project Structure
 
 ```text
-vehical-service-center/
-├── backend/
-│   └── app/
-│       ├── routers/
-│       ├── schemas/
-│       ├── services/
-│       ├── database/
-│       ├── security.py
-│       └── main.py
-├── database/
-│   └── schema.sql
-├── docs/
-│   ├── api.md
-│   ├── database.md
-│   ├── requirements.md
-│   └── workflow.md
-├── frontend/
-│   ├── chatbot/
-│   ├── customer-portal/
-│   ├── js/
-│   └── pages/
-├── migrate_vehicle_categories.py
-├── requirements.txt
-├── .env.example
-└── README.md
+AI-vehicle-service-center/
+|-- backend/
+|   `-- app/
+|       |-- database/
+|       |-- routers/
+|       |-- schemas/
+|       |-- services/
+|       |   `-- ollama_client.py
+|       |-- security.py
+|       `-- main.py
+|-- database/
+|   |-- schema.postgresql.sql
+|   `-- schema.sql
+|-- docs/
+|   |-- api.md
+|   |-- database.md
+|   |-- requirements.md
+|   `-- workflow.md
+|-- frontend/
+|   |-- chatbot/
+|   |-- customer-portal/
+|   |-- js/
+|   |   |-- api.js
+|   |   `-- config.js
+|   `-- pages/
+|-- .env.example
+|-- .gitignore
+|-- .python-version
+|-- requirements.txt
+`-- README.md
 ```
 
 ## Local Setup
@@ -86,18 +91,20 @@ python -m pip install -r requirements.txt
 ### 2. Configure environment variables
 
 Copy `.env.example` to `.env` and edit `.env` in VS Code.
-Enter your own MySQL and SMTP settings and generate a unique JWT secret.
+Configure your Supabase PostgreSQL and SMTP settings and generate a unique JWT secret. Local MySQL is also supported.
 
 Never commit `.env` or share its contents.
 
 ### 3. Prepare the database
 
-For a **new database setup**, review and execute `database/schema.sql`
-using MySQL Workbench or your MySQL client.
+The project includes two fresh-install schemas:
 
-This file describes the complete schema for a fresh installation.
-It is not an upgrade script for an existing database. Use the project's
-migration scripts when upgrading an existing installation.
+- PostgreSQL: `database/schema.postgresql.sql`
+- MySQL: `database/schema.sql`
+
+Use the schema matching your selected database. These files
+are for fresh installations, not upgrades to existing databases.
+Back up existing data before applying any migration.
 
 ### 4. Start the backend
 
@@ -132,12 +139,36 @@ Customer portal:
 
 ## AI Assistant
 
-The local AI integration uses Ollama and the `llama3.2:3b` model.
-Ollama must be installed, the model must be available locally, and its
-local service must be running for the AI features to respond.
+Both customer and administrator chatbots use the shared backend service:
+`backend/app/services/ollama_client.py`.
 
-The assistant can only perform operations that are implemented and
-authorized by the backend.
+### Local Development
+
+Local development uses Ollama with the llama3.2:3b model.
+Install Ollama, download the model using ollama pull llama3.2:3b,
+and keep the local Ollama service running.
+
+Configure OLLAMA_MODE=local.
+
+### Production with Ollama Cloud
+
+Production can use Ollama Cloud with the Gemma 4 model.
+Configure these variables in the private backend hosting settings:
+
+```ini
+APP_ENV=production
+OLLAMA_MODE=cloud
+OLLAMA_CLOUD_MODEL=gemma4
+OLLAMA_API_KEY=your_private_ollama_cloud_api_key
+```
+
+Never commit a real API key to GitHub or place it in frontend JavaScript.
+Ollama Cloud usage may incur token-based charges.
+Check current pricing at https://ollama.com/pricing.
+
+The cloud connection must pass a live API test before production chatbot functionality is considered ready.
+
+Administrative database operations remain controlled by authenticated backend routes.
 
 ## Documentation
 
@@ -148,7 +179,7 @@ authorized by the backend.
 
 ## Important Notes
 
-- This is a local development setup, not a production deployment guide.
+- Production deployment requires configured hosting, database, email, and Ollama Cloud settings.
 - Do not commit `.env`, passwords, app passwords, JWT secrets, or tokens.
 - Back up the database before applying migrations.
 - Do not execute the fresh-install schema as an assumed database upgrade.

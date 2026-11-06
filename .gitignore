@@ -34,3 +34,6 @@ Thumbs.db
 
 # All local backup copies
 *.backup*
+
+# Local .bak backup files
+*.bak

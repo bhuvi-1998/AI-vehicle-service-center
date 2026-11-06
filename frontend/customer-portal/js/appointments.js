@@ -1,5 +1,5 @@
 
-const APPOINTMENT_API = "http://127.0.0.1:8000";
+const APPOINTMENT_API = window.API_BASE_URL;
 
 async function loadMyAppointments() {
     const token = localStorage.getItem("customer_access_token");

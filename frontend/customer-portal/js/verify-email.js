@@ -1,5 +1,5 @@
 
-const VERIFY_API_URL = "http://127.0.0.1:8000";
+const VERIFY_API_URL = window.API_BASE_URL;
 
 async function verifyEmailFromLink() {
     const message = document.getElementById("verificationMessage");

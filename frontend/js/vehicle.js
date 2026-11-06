@@ -1,5 +1,5 @@
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = window.API_BASE_URL;
 
 const vehicleForm = document.getElementById("vehicleForm");
 const customerSelect = document.getElementById("customer_id");

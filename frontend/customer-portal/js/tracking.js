@@ -1,5 +1,5 @@
 ﻿
-const TRACKING_API = "http://127.0.0.1:8000";
+const TRACKING_API = window.API_BASE_URL;
 
 let myRepairAppointments = [];
 

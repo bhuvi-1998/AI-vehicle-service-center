@@ -1,4 +1,4 @@
-﻿const CUSTOMER_API_URL = "http://127.0.0.1:8000";
+﻿const CUSTOMER_API_URL = window.API_BASE_URL;
 
 function getCustomerToken() {
     return localStorage.getItem("customer_access_token");

@@ -1,5 +1,4 @@
 import re
-import requests
 
 from datetime import date, datetime, time, timezone, timedelta
 
@@ -9,6 +8,7 @@ from pydantic import BaseModel, Field
 from backend.app.security import get_current_admin
 from backend.app.schemas.appointment import RepairStatus
 from backend.app.database.database import begin_transaction, get_connection
+from backend.app.services.ollama_client import OllamaClientError, generate_chat_reply
 
 from backend.app.services.appointment import get_all_appointments
 from backend.app.services.customer import get_all_customers
@@ -25,8 +25,6 @@ router = APIRouter(
     tags=["Admin AI Assistant"]
 )
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "llama3.2:3b"
 
 
 class AdminChatbotMessage(BaseModel):
@@ -509,8 +507,16 @@ def get_admin_data_reply(message):
     if "customer" in query:
         return customer_reply(query)
 
-    # Vehicle requests.
-    if "vehicle" in query or "registration" in query:
+    # Route explicit vehicle-record lookups to the database.
+    vehicle_lookup_request = (
+        re.search(r"\b(show|list|display|find|search|lookup|get)\s+(?:me\s+)?(?:a\s+)?(?:all\s+)?(?:the\s+)?(?:matching\s+)?(?:vehicle|vehicles|registration|registrations)\b", query)
+        or re.search(r"\b(how many|count|total)\s+(?:of the\s+)?vehicles?\b", query)
+        or re.search(r"\b(vehicle|vehicles)\s+(details|records|list|number)\b", query)
+        or re.search(r"\b(registration)\s+(details|number|records)\b", query)
+        or re.search(r"\b(details|records)\s+(of|for)\s+(the\s+)?vehicles?\b", query)
+        or "registered vehicles" in query
+    )
+    if vehicle_lookup_request:
         return vehicle_reply(query)
 
     # Service requests.
@@ -541,55 +547,36 @@ def get_admin_data_reply(message):
 
 
 def ask_ollama(message):
-    try:
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": OLLAMA_MODEL,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are an assistant for the administrator "
-                            "of a vehicle service center. Answer general "
-                            "questions about vehicle servicing, workshop "
-                            "operations and customer service. Be friendly "
-                            "and concise. You are operating in read-only "
-                            "mode. Do not claim to access live database "
-                            "records or to create, update, cancel, delete "
-                            "or modify anything. Live administrative "
-                            "records are retrieved separately by the "
-                            "application."
-                        )
-                    },
-                    {
-                        "role": "user",
-                        "content": message
-                    }
-                ],
-                "stream": False
-            },
-            timeout=120
-        )
-
-        response.raise_for_status()
-
-        data = response.json()
-        reply = data.get("message", {}).get("content", "").strip()
-
-        if not reply:
-            raise HTTPException(
-                status_code=502,
-                detail="The AI assistant returned an empty response."
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an assistant for the administrator "
+                "of a vehicle service center. Answer general "
+                "questions about vehicle servicing, workshop "
+                "operations and customer service. Be friendly "
+                "and concise. You are operating in read-only "
+                "mode. Do not claim to access live database "
+                "records or to create, update, cancel, delete "
+                "or modify anything. Live administrative "
+                "records are retrieved separately by the "
+                "application."
             )
+        },
+        {
+            "role": "user",
+            "content": message
+        }
+    ]
 
-        return reply
+    try:
+        return generate_chat_reply(messages)
 
-    except requests.RequestException:
+    except OllamaClientError as exc:
         raise HTTPException(
             status_code=502,
-            detail="The local AI assistant is unavailable. Please try again."
-        )
+            detail=str(exc)
+        ) from exc
 
 
 @router.post("/message")

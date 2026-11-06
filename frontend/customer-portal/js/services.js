@@ -1,5 +1,5 @@
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = window.API_BASE_URL;
 
 const servicesList = document.getElementById("servicesList");
 const servicesStatus = document.getElementById("servicesStatus");

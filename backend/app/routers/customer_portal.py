@@ -1,3 +1,4 @@
+import os
 from datetime import date, datetime
 from typing import Literal
 
@@ -259,12 +260,14 @@ def list_my_appointments(
 
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            time_expression = (
+                "TO_CHAR(a.appointment_time, 'HH24:MI:SS')"
+                if os.getenv("DB_DRIVER", "mysql").lower() in ("postgres", "postgresql", "psycopg")
+                else "TIME_FORMAT(a.appointment_time, '%%H:%%i:%%s')"
+            )
+            cursor.execute(f"""
                 SELECT a.appointment_id, a.appointment_date,
-                    TIME_FORMAT(
-                        a.appointment_time, '%%H:%%i:%%s'
-                    ) AS appointment_time,
+                    {time_expression} AS appointment_time,
                     a.status,
                     s.service_name, s.price,
                     v.vehicle_number, v.brand, v.model

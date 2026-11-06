@@ -1,4 +1,4 @@
-const PASSWORD_RESET_API = "http://127.0.0.1:8000";
+const PASSWORD_RESET_API = window.API_BASE_URL;
 
 (() => {
     const accountType = document.body.dataset.accountType;
