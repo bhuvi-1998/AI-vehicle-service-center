@@ -2,8 +2,11 @@
 
 Database name: `vehicle_service_center`
 
-The canonical fresh-install schema is stored in `database/schema.sql`.
-It defines the 12 tables listed below.
+The project includes separate fresh-install schemas:
+- PostgreSQL: database/schema.postgresql.sql
+- MySQL: database/schema.sql
+
+The tables below describe the application's data model.
 
 ## Tables
 
@@ -57,11 +60,11 @@ vehicle categories.
 The application validates status transitions in the backend.
 The implemented sequence is:
 
-1. Pending → Confirmed or Cancelled
-2. Confirmed → Vehicle Received or Cancelled
-3. Vehicle Received → In Progress
-4. In Progress → Ready for Pickup
-5. Ready for Pickup → Completed
+1. Pending â†’ Confirmed or Cancelled
+2. Confirmed â†’ Vehicle Received or Cancelled
+3. Vehicle Received â†’ In Progress
+4. In Progress â†’ Ready for Pickup
+5. Ready for Pickup â†’ Completed
 
 Completed and Cancelled appointments are terminal.
 
@@ -76,10 +79,27 @@ be performed through the application's protected backend operations.
 
 ## Fresh Installation vs Existing Database
 
-`database/schema.sql` is intended to create a fresh database structure.
-Its `CREATE TABLE IF NOT EXISTS` statements do not add missing columns
-to tables that already exist.
+The PostgreSQL fresh-install schema is database/schema.postgresql.sql.
+The MySQL fresh-install schema is database/schema.sql.
 
-Do not treat this file as an upgrade script for an existing database.
-Use the appropriate migration script and back up the database before
-making structural changes.
+These schemas are intended for fresh installations, not upgrades.
+Do not execute a fresh-install schema over an existing database containing application data.
+Back up existing data and use a reviewed migration before changing an existing schema.
+
+## PostgreSQL Connection Pooling
+
+In PostgreSQL mode, FastAPI initializes a shared Psycopg connection pool during application startup and closes it during shutdown.
+
+Existing database access functions borrow connections from the pool. Calling connection.close() returns a connection to the pool for reuse.
+
+Default settings from .env.example:
+
+- DB_POOL_MIN_SIZE=1
+- DB_POOL_MAX_SIZE=5
+- DB_POOL_TIMEOUT=10 seconds
+- DB_POOL_STARTUP_TIMEOUT=20 seconds
+
+The maximum pool size applies per backend process. Multiple workers or instances multiply the total database connections.
+
+MySQL continues to use its existing direct connection behavior.
+PostgreSQL pooling is provided by psycopg[binary,pool].

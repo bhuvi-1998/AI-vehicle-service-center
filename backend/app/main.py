@@ -1,5 +1,8 @@
 import os
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+from backend.app.database.database import close_database_pool, init_database_pool
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.routers.admin import router as admin_router
@@ -32,10 +35,22 @@ IS_PRODUCTION = (
     os.getenv("APP_ENV", "development").strip().lower() == "production"
 )
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Open the PostgreSQL pool before accepting requests.
+    init_database_pool()
+    try:
+        yield
+    finally:
+        # Return and close pooled connections at application shutdown.
+        close_database_pool()
+
+
 app = FastAPI(
     docs_url=None if IS_PRODUCTION else "/docs",
     redoc_url=None if IS_PRODUCTION else "/redoc",
     openapi_url=None if IS_PRODUCTION else "/openapi.json",
+    lifespan=lifespan,
 )
 
 # CORS origins:

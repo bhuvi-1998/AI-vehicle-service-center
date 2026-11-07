@@ -1,7 +1,9 @@
 
 import os
+import threading
 
 import pymysql
+from psycopg_pool import ConnectionPool, PoolTimeout
 from pymysql.err import IntegrityError as MySQLIntegrityError
 from psycopg import IntegrityError as PostgreSQLIntegrityError
 from dotenv import load_dotenv
@@ -12,29 +14,126 @@ INTEGRITY_ERRORS = (MySQLIntegrityError, PostgreSQLIntegrityError)
 load_dotenv()
 
 
-def get_connection():
-    """
-    Return a database connection based on DB_DRIVER.
+_POSTGRES_POOL_LOCK = threading.Lock()
+_postgres_pool = None
 
-    Supported drivers:
-        mysql       - Local MySQL development
-        postgresql  - Supabase PostgreSQL production
-    """
 
-    driver = os.getenv("DB_DRIVER", "mysql").strip().lower()
-
+def _get_postgresql_connection_kwargs():
+    """Build PostgreSQL connection settings from environment variables."""
     db_password = os.getenv("DB_PASSWORD")
 
     if db_password is None:
         raise RuntimeError(
-            "DB_PASSWORD is missing from the project .env file."
+            "DB_PASSWORD is missing from the environment configuration."
         )
 
-    # --------------------------------------------------
-    # MYSQL CONNECTION
-    # --------------------------------------------------
+    required_variables = ("DB_HOST", "DB_USER", "DB_NAME")
+    missing = [
+        name for name in required_variables
+        if not os.getenv(name)
+    ]
+
+    if missing:
+        raise RuntimeError(
+            "Missing PostgreSQL configuration: " + ", ".join(missing)
+        )
+
+    from psycopg.rows import dict_row
+
+    return {
+        "host": os.getenv("DB_HOST"),
+        "port": int(os.getenv("DB_PORT", "5432")),
+        "user": os.getenv("DB_USER"),
+        "password": db_password,
+        "dbname": os.getenv("DB_NAME"),
+        "sslmode": os.getenv("DB_SSLMODE", "require"),
+        "connect_timeout": 10,
+        "row_factory": dict_row,
+    }
+
+
+def init_database_pool():
+    """
+    Initialize one reusable PostgreSQL connection pool per process.
+
+    MySQL does not use this pool and retains its existing connection behavior.
+    """
+    global _postgres_pool
+
+    driver = os.getenv("DB_DRIVER", "mysql").strip().lower()
+
+    if driver not in ("postgres", "postgresql", "psycopg"):
+        return None
+
+    with _POSTGRES_POOL_LOCK:
+        if _postgres_pool is not None and not _postgres_pool.closed:
+            return _postgres_pool
+
+        min_size = int(os.getenv("DB_POOL_MIN_SIZE", "1"))
+        max_size = int(os.getenv("DB_POOL_MAX_SIZE", "5"))
+
+        if min_size < 1 or max_size < min_size:
+            raise RuntimeError(
+                "Invalid database pool sizes: require "
+                "1 <= DB_POOL_MIN_SIZE <= DB_POOL_MAX_SIZE."
+            )
+
+        pool = ConnectionPool(
+            conninfo="",
+            kwargs=_get_postgresql_connection_kwargs(),
+            min_size=min_size,
+            max_size=max_size,
+            timeout=float(os.getenv("DB_POOL_TIMEOUT", "10")),
+            close_returns=True,
+            open=False,
+            name="vehicle-service-center-postgres",
+        )
+
+        try:
+            pool.open(
+                wait=True,
+                timeout=float(
+                    os.getenv("DB_POOL_STARTUP_TIMEOUT", "20")
+                ),
+            )
+        except Exception:
+            pool.close()
+            raise
+
+        _postgres_pool = pool
+        return pool
+
+
+def close_database_pool():
+    """Close the PostgreSQL pool during application shutdown."""
+    global _postgres_pool
+
+    with _POSTGRES_POOL_LOCK:
+        pool = _postgres_pool
+        _postgres_pool = None
+
+    if pool is not None and not pool.closed:
+        pool.close(timeout=5)
+
+
+def get_connection():
+    """
+    Return a database connection based on DB_DRIVER.
+
+    PostgreSQL connections are borrowed from the shared pool.
+    Calling connection.close() returns them to the pool.
+
+    MySQL continues to create and close connections as before.
+    """
+    driver = os.getenv("DB_DRIVER", "mysql").strip().lower()
 
     if driver in ("mysql", "mariadb"):
+        db_password = os.getenv("DB_PASSWORD")
+
+        if db_password is None:
+            raise RuntimeError(
+                "DB_PASSWORD is missing from the environment configuration."
+            )
 
         return pymysql.connect(
             host=os.getenv("DB_HOST", "localhost"),
@@ -50,54 +149,22 @@ def get_connection():
             charset="utf8mb4"
         )
 
-    # --------------------------------------------------
-    # POSTGRESQL CONNECTION (SUPABASE)
-    # --------------------------------------------------
-
     if driver in ("postgres", "postgresql", "psycopg"):
+        pool = init_database_pool()
 
         try:
-            import psycopg
-            from psycopg.rows import dict_row
-        except ImportError as exc:
-            raise RuntimeError(
-                "PostgreSQL support requires Psycopg 3. "
-                "Install it using: "
-                "python -m pip install 'psycopg[binary]>=3.2,<4'"
-            ) from exc
-
-        required_variables = [
-            "DB_HOST",
-            "DB_USER",
-            "DB_NAME"
-        ]
-
-        missing = [
-            name for name in required_variables
-            if not os.getenv(name)
-        ]
-
-        if missing:
-            raise RuntimeError(
-                "Missing PostgreSQL configuration: "
-                + ", ".join(missing)
+            return pool.getconn(
+                timeout=float(os.getenv("DB_POOL_TIMEOUT", "10"))
             )
-
-        return psycopg.connect(
-            host=os.getenv("DB_HOST"),
-            port=int(os.getenv("DB_PORT", "5432")),
-            user=os.getenv("DB_USER"),
-            password=db_password,
-            dbname=os.getenv("DB_NAME"),
-            sslmode=os.getenv("DB_SSLMODE", "require"),
-            connect_timeout=10,
-            row_factory=dict_row
-        )
+        except PoolTimeout as exc:
+            raise RuntimeError(
+                "Timed out waiting for an available PostgreSQL connection. "
+                "The database may be busy."
+            ) from exc
 
     raise RuntimeError(
         "Unsupported DB_DRIVER. Use 'mysql' or 'postgresql'."
     )
-
 # --------------------------------------------------
 # Cross-database compatibility helpers
 # --------------------------------------------------

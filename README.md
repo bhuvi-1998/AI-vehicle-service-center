@@ -137,6 +137,23 @@ Customer portal:
 
 `http://127.0.0.1:5503/customer-portal/index.html`
 
+## PostgreSQL Connection Pooling
+
+The FastAPI backend uses a shared Psycopg connection pool when DB_DRIVER is postgresql.
+
+The pool is initialized during application startup and closed during application shutdown. Existing connection.close() calls return PostgreSQL connections to the pool for reuse.
+
+Default settings:
+
+- DB_POOL_MIN_SIZE=1
+- DB_POOL_MAX_SIZE=5
+- DB_POOL_TIMEOUT=10 seconds
+- DB_POOL_STARTUP_TIMEOUT=20 seconds
+
+The maximum pool size applies per backend process. Multiple workers or deployed instances can increase total database connections.
+
+MySQL continues to use direct connections. PostgreSQL pooling requires psycopg[binary,pool].
+
 ## AI Assistant
 
 Both customer and administrator chatbots use the shared backend service:
