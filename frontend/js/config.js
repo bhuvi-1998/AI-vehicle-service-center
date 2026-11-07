@@ -13,7 +13,7 @@
     const LOCAL_API_URL = "http://127.0.0.1:8000";
 
     const PRODUCTION_API_URL =
-        "https://YOUR-RENDER-BACKEND.onrender.com";
+        "https://ai-vehicle-service-center.onrender.com";
 
     window.API_BASE_URL = isLocalDevelopment
         ? LOCAL_API_URL
