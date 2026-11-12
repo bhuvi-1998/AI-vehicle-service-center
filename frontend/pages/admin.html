@@ -1,0 +1,679 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Vehicle Service Center</title>
+
+    <link rel="stylesheet" href="../css/admin-style.css">
+    <link rel="stylesheet" href="../chatbot/chatbot.css">
+    <style>
+        .admin-profile-edit-panel {
+            margin: 0 5% 40px;
+            padding: 25px;
+            background: #252A31;
+            color: #F5F5F5;
+            border: 1px solid #3A414B;
+            border-radius: 12px;
+        }
+
+        /* Ensure the profile form stays hidden when closed. */
+        .admin-profile-edit-panel[hidden] {
+            display: none !important;
+        }
+
+        .admin-profile-actions {
+            margin: 0 5% 25px;
+        }
+
+        .admin-profile-toggle,
+        #adminProfileForm button {
+            padding: 12px 18px;
+            background: #F36B21;
+            color: #FFFFFF;
+            border: 0;
+            border-radius: 7px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .admin-profile-toggle:hover,
+        #adminProfileForm button:hover {
+            background: #D95512;
+        }
+
+        .admin-profile-edit-panel h2 {
+            margin-top: 8px;
+        }
+
+        #adminProfileForm {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px 20px;
+        }
+
+        #adminProfileForm label {
+            display: grid;
+            gap: 7px;
+            align-self: end;
+            color: #F5F5F5;
+            font-size: 14px;
+        }
+
+        #adminProfileForm input {
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            padding: 12px;
+            background: #17191D;
+            color: #F5F5F5;
+            border: 1px solid #3A414B;
+            border-radius: 7px;
+        }
+
+        #adminProfileForm input:focus {
+            outline: 2px solid #F36B21;
+            outline-offset: 1px;
+        }
+
+        #adminProfileForm button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        #adminProfileMessage {
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 600px) {
+            .admin-profile-edit-panel {
+                margin: 0 4% 30px;
+                padding: 18px;
+            }
+
+            .admin-profile-actions {
+                margin: 0 4% 25px;
+            }
+
+            #adminProfileForm {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-dashboard-body">
+
+    <div class="admin-shell">
+
+        <header class="admin-topbar">
+
+            <a class="admin-brand" href="admin.html">
+                <span class="admin-brand-mark">VS</span>
+
+                <span class="admin-brand-text">
+                    <strong>VEHICLE <span>SERVICE</span></strong>
+                    <small>SERVICE CENTER MANAGEMENT</small>
+                </span>
+            </a>
+
+            <div class="admin-top-actions">
+
+                <span class="admin-live-label">
+                    <span class="admin-live-dot"></span>
+                    ADMIN WORKSPACE
+                </span>
+
+                <button
+                    type="button"
+                    class="admin-logout"
+                    id="logoutButton"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </header>
+
+        <main>
+
+            <!-- Welcome banner -->
+            <section class="admin-hero">
+
+                <img
+                    class="admin-hero-photo"
+                    src="../images/admin-workshop.jpg"
+                    alt="Vehicle service workshop"
+                >
+
+                <div class="admin-hero-shade"></div>
+
+                <div class="admin-hero-content">
+
+                    <p class="admin-eyebrow">
+                        VEHICLE SERVICE CENTER
+                    </p>
+
+                    <h1>
+                        Welcome back,<br>
+                        <span id="adminName">Loading...</span>
+                    </h1>
+
+                    <p class="admin-hero-description">
+                        Manage your service center from one place.
+                        Access customers, vehicles, appointments, services,
+                        technicians, spare parts, estimates and invoices.
+                    </p>
+
+                    <a
+                        class="admin-primary-link"
+                        href="appointment.html"
+                    >
+                        Manage Appointments
+                        <span aria-hidden="true">&rarr;</span>
+                    </a>
+
+                </div>
+
+                <div class="admin-hero-caption">
+                    <span class="admin-caption-line"></span>
+                    WORKSHOP MANAGEMENT
+                </div>
+
+            </section>
+
+            <!-- Admin profile summary -->
+            <section
+                class="admin-profile-strip"
+                aria-label="Admin profile"
+            >
+
+                <div class="admin-profile-item">
+
+                    <span class="admin-profile-icon" aria-hidden="true">
+                        ♙
+                    </span>
+
+                    <div>
+                        <span class="admin-profile-label">
+                            ADMINISTRATOR
+                        </span>
+
+                        <strong id="adminProfileName">Loading...</strong>
+                    </div>
+
+                </div>
+
+                <div class="admin-profile-item">
+
+                    <span class="admin-profile-icon" aria-hidden="true">
+                        ✉
+                    </span>
+
+                    <div>
+                        <span class="admin-profile-label">
+                            EMAIL ADDRESS
+                        </span>
+
+                        <strong id="adminEmail">Loading...</strong>
+                    </div>
+
+                </div>
+
+                <div class="admin-profile-item">
+
+                    <span class="admin-profile-icon" aria-hidden="true">
+                        ✓
+                    </span>
+
+                    <div>
+                        <span class="admin-profile-label">
+                            ACCOUNT ROLE
+                        </span>
+
+                        <strong id="adminRole">Loading...</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Edit Profile option -->
+            <div class="admin-profile-actions">
+
+                <button
+                    type="button"
+                    class="admin-profile-toggle"
+                    id="toggleAdminProfile"
+                    aria-expanded="false"
+                    aria-controls="adminProfilePanel"
+                >
+                    Edit Profile
+                </button>
+
+            </div>
+
+            <!-- Hidden profile edit form -->
+            <section
+                class="admin-profile-edit-panel"
+                id="adminProfilePanel"
+                aria-labelledby="editAdminHeading"
+                hidden
+            >
+
+                <p class="admin-eyebrow">ACCOUNT SETTINGS</p>
+
+                <h2 id="editAdminHeading">Edit Admin Profile</h2>
+
+                <p>
+                    Update your name and email address.
+                    Leave the new-password field blank to keep
+                    your current password.
+                </p>
+
+                <form id="adminProfileForm">
+
+                    <label for="editAdminName">
+                        Admin Name
+
+                        <input
+                            type="text"
+                            id="editAdminName"
+                            required
+                            minlength="2"
+                            maxlength="100"
+                            autocomplete="name"
+                        >
+                    </label>
+
+                    <label for="editAdminEmail">
+                        Email Address
+
+                        <input
+                            type="email"
+                            id="editAdminEmail"
+                            required
+                            minlength="5"
+                            maxlength="254"
+                            autocomplete="email"
+                        >
+                    </label>
+
+                    <label for="editAdminPassword">
+                        New Password (Optional)
+
+                        <input
+                            type="password"
+                            id="editAdminPassword"
+                            minlength="8"
+                            maxlength="128"
+                            autocomplete="new-password"
+                            placeholder="Leave blank to keep current password"
+                        >
+                    </label>
+
+                    <div>
+                        <button
+                            type="submit"
+                            id="saveAdminProfile"
+                        >
+                            Save Profile
+                        </button>
+                    </div>
+
+                </form>
+
+                <p
+                    id="adminProfileMessage"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+            </section>
+
+            <!-- Existing management workspace -->
+            <section class="admin-workspace">
+
+                <div class="admin-section-heading">
+
+                    <p class="admin-eyebrow">
+                        MANAGEMENT CENTER
+                    </p>
+
+                    <h2>Admin Workspace</h2>
+
+                    <p>
+                        Choose a section to manage your service center.
+                    </p>
+
+                </div>
+
+                <div class="admin-module-grid">
+
+                    <a class="admin-module-card" href="customer.html">
+                        <span class="admin-module-icon">♙</span>
+                        <span class="admin-module-info">
+                            <strong>Customers</strong>
+                            <small>Manage customer records</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="vehicle.html">
+                        <span class="admin-module-icon">🚘</span>
+                        <span class="admin-module-info">
+                            <strong>Vehicles</strong>
+                            <small>Manage vehicle records</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="appointment.html">
+                        <span class="admin-module-icon">▦</span>
+                        <span class="admin-module-info">
+                            <strong>Appointments</strong>
+                            <small>Manage service bookings</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="service.html">
+                        <span class="admin-module-icon">⚙</span>
+                        <span class="admin-module-info">
+                            <strong>Services</strong>
+                            <small>Manage service offerings</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="technician.html">
+                        <span class="admin-module-icon">🔧</span>
+                        <span class="admin-module-info">
+                            <strong>Technicians</strong>
+                            <small>Manage workshop staff</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="parts.html">
+                        <span class="admin-module-icon">⚙</span>
+                        <span class="admin-module-info">
+                            <strong>Spare Parts</strong>
+                            <small>Manage parts inventory</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="estimate.html">
+                        <span class="admin-module-icon">▤</span>
+                        <span class="admin-module-info">
+                            <strong>Estimates</strong>
+                            <small>Create estimates and PDFs</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                    <a class="admin-module-card" href="invoice.html">
+                        <span class="admin-module-icon">₹</span>
+                        <span class="admin-module-info">
+                            <strong>Invoices</strong>
+                            <small>Manage bills and payments</small>
+                        </span>
+                        <span class="admin-module-arrow">↗</span>
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer class="admin-dashboard-footer">
+            <span>VEHICLE SERVICE CENTER</span>
+            <span>ADMINISTRATION WORKSPACE</span>
+        </footer>
+
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script>
+        (() => {
+
+            const API_URL = window.API_BASE_URL;
+            const loginPath = "login.html";
+
+            const form = document.getElementById("adminProfileForm");
+
+            const saveButton =
+                document.getElementById("saveAdminProfile");
+
+            const message =
+                document.getElementById("adminProfileMessage");
+
+            const profilePanel =
+                document.getElementById("adminProfilePanel");
+
+            const toggleProfileButton =
+                document.getElementById("toggleAdminProfile");
+
+            let token = localStorage.getItem("access_token");
+
+            function clearAdminSession() {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("admin_name");
+                localStorage.removeItem("admin_email");
+                localStorage.removeItem("admin_role");
+            }
+
+            function showMessage(text, isError = false) {
+                message.textContent = text;
+                message.style.color =
+                    isError ? "#FF9A9A" : "#86E3A1";
+            }
+
+            if (!token || localStorage.getItem("admin_role") !== "admin") {
+                clearAdminSession();
+                window.location.replace(loginPath);
+                return;
+            }
+
+            function displayAdmin(admin) {
+
+                document.getElementById("adminName").textContent =
+                    admin.admin_name || "Administrator";
+
+                document.getElementById("adminProfileName").textContent =
+                    admin.admin_name || "Not available";
+
+                document.getElementById("adminEmail").textContent =
+                    admin.email || "Not available";
+
+                document.getElementById("adminRole").textContent =
+                    admin.role || "admin";
+
+                document.getElementById("editAdminName").value =
+                    admin.admin_name || "";
+
+                document.getElementById("editAdminEmail").value =
+                    admin.email || "";
+
+                localStorage.setItem(
+                    "admin_name",
+                    admin.admin_name || ""
+                );
+
+                localStorage.setItem(
+                    "admin_email",
+                    admin.email || ""
+                );
+
+                localStorage.setItem(
+                    "admin_role",
+                    admin.role || "admin"
+                );
+            }
+
+            async function apiRequest(path, options = {}) {
+
+                const response = await fetch(
+                    `${API_URL}${path}`,
+                    {
+                        ...options,
+                        headers: {
+                            ...(options.headers || {}),
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const result =
+                    await response.json().catch(() => ({}));
+
+                if (response.status === 401 ||
+                    response.status === 403) {
+
+                    clearAdminSession();
+                    window.location.replace(loginPath);
+
+                    throw new Error(
+                        "Your admin session has expired. Please log in again."
+                    );
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.detail || "The request failed."
+                    );
+                }
+
+                return result;
+            }
+
+            // Open and close the profile editor.
+            toggleProfileButton.addEventListener("click", () => {
+
+                profilePanel.hidden = !profilePanel.hidden;
+
+                const isOpen = !profilePanel.hidden;
+
+                toggleProfileButton.textContent = isOpen
+                    ? "Close Profile Editor"
+                    : "Edit Profile";
+
+                toggleProfileButton.setAttribute(
+                    "aria-expanded",
+                    String(isOpen)
+                );
+
+                if (isOpen) {
+                    profilePanel.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }
+            });
+
+            async function loadAdminProfile() {
+
+                try {
+
+                    const admin =
+                        await apiRequest("/admin/me");
+
+                    displayAdmin(admin);
+
+                } catch (error) {
+
+                    showMessage(error.message, true);
+
+                }
+            }
+
+            form.addEventListener("submit", async event => {
+
+                event.preventDefault();
+
+                showMessage("");
+
+                saveButton.disabled = true;
+                saveButton.textContent = "Saving...";
+
+                const password =
+                    document.getElementById(
+                        "editAdminPassword"
+                    ).value;
+
+                const profileData = {
+
+                    admin_name:
+                        document.getElementById(
+                            "editAdminName"
+                        ).value.trim(),
+
+                    email:
+                        document.getElementById(
+                            "editAdminEmail"
+                        ).value.trim(),
+
+                    password: password || null
+                };
+
+                try {
+
+                    const result = await apiRequest(
+                        "/admin/me",
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+
+                            body: JSON.stringify(profileData)
+                        }
+                    );
+
+                    displayAdmin(result);
+
+                    document.getElementById(
+                        "editAdminPassword"
+                    ).value = "";
+
+                    showMessage(
+                        result.message ||
+                        "Admin profile updated successfully."
+                    );
+
+                } catch (error) {
+
+                    showMessage(error.message, true);
+
+                } finally {
+
+                    saveButton.disabled = false;
+                    saveButton.textContent = "Save Profile";
+
+                }
+            });
+
+            document.getElementById(
+                "logoutButton"
+            ).addEventListener("click", () => {
+
+                clearAdminSession();
+                window.location.replace(loginPath);
+
+            });
+
+            loadAdminProfile();
+
+        })();
+    </script>
+    <script src="../js/api.js"></script>
+    <script src="../chatbot/chatbot.js"></script>
+
+</body>
+</html>

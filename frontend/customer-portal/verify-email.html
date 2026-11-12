@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email | VehicleCare</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-body">
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+    </header>
+
+    <main class="auth-layout">
+        <section class="auth-card">
+            <p class="eyebrow">CUSTOMER ACCOUNT</p>
+            <h1>Email Verification</h1>
+
+            <p id="verificationMessage" class="auth-message" role="status" aria-live="polite">
+                Verifying your email address...
+            </p>
+
+            <p id="verificationAction" class="auth-footer"></p>
+        </section>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="js/verify-email.js" defer></script>
+</body>
+</html>

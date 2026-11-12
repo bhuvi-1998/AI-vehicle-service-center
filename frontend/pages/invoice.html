@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Final Invoice Management</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+
+    <h1>Final Invoice / Bill</h1>
+
+    <p id="requirementMessage"></p>
+    <p id="message"></p>
+
+    <form id="invoiceForm" hidden>
+
+        <h2>Create Final Bill</h2>
+
+        <label for="appointment_id">Completed Appointment:</label>
+        <br>
+
+        <select id="appointment_id" required>
+            <option value="">Select Appointment</option>
+        </select>
+
+        <br><br>
+
+        <h3>Parts Actually Used</h3>
+
+        <p>Choose only the parts used during the completed service. Stock is deducted when the final bill is created.</p>
+
+        <div id="partsContainer"></div>
+
+        <br>
+
+        <label for="discount_amount">Discount Amount:</label>
+        <br>
+
+        <input
+            type="number"
+            id="discount_amount"
+            min="0"
+            step="0.01"
+        >
+
+        <br><br>
+
+        <label for="notes">Notes:</label>
+        <br>
+
+        <textarea id="notes" rows="4" cols="40"></textarea>
+
+        <br><br>
+
+        <button type="submit">Create Final Bill</button>
+
+    </form>
+
+    <hr>
+
+    <h2>Saved Invoices</h2>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>Invoice ID</th>
+                <th>Appointment</th>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Final Total</th>
+                <th>Payment Status</th>
+                <th>Payment Method</th>
+                <th>Invoice Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="invoiceTable"></tbody>
+
+    </table>
+
+    <br>
+
+    <a href="admin.html">Back to Admin</a>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/invoice.js"></script>
+
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+
+</html>

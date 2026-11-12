@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Management</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+<body>
+    <h1>Service Management</h1>
+
+    <form id="serviceForm">
+        <input type="hidden" id="service_id">
+
+        <label for="service_name">Service Name:</label><br>
+        <input type="text" id="service_name" required maxlength="100">
+        <br><br>
+
+        <label for="vehicle_type">Vehicle Category:</label><br>
+        <select id="vehicle_type" required>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Superbike">Superbike</option>
+        </select>
+        <br><br>
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" rows="4" cols="30"></textarea>
+        <br><br>
+
+        <label for="price">Price (₹):</label><br>
+        <input type="number" id="price" min="0" step="0.01" required>
+        <br><br>
+
+        <button type="submit">Save Service</button>
+        <button type="button" id="cancelButton" hidden>Cancel</button>
+    </form>
+
+    <p id="message" role="status"></p>
+
+    <hr>
+
+    <h2>Services</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Service ID</th>
+                <th>Service Name</th>
+                <th>Vehicle Category</th>
+                <th>Description</th>
+                <th>Price (₹)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="serviceTable"></tbody>
+    </table>
+
+    <br>
+    <a href="admin.html">Back to Admin</a>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/service.js"></script>
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+</html>

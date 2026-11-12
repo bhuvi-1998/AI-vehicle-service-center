@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book a Service | VehicleCare</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .portal-container {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .portal-card {
+            background: #0A192F;
+            border: 1px solid #263B55;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .portal-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .portal-form label {
+            display: grid;
+            gap: 7px;
+        }
+
+        .portal-form input,
+        .portal-form select {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #344963;
+            border-radius: 7px;
+            background: #061326;
+            color: white;
+        }
+
+        .portal-button {
+            padding: 12px;
+            background: #FFD700;
+            color: #020B18;
+            border: 0;
+            border-radius: 7px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .portal-message {
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body class="auth-body">
+
+    <header class="site-header">
+
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="services.html">Services</a>
+            <a href="my-appointments.html">My Appointments</a>
+        </nav>
+
+    </header>
+
+    <main class="portal-container">
+
+        <p class="eyebrow">CUSTOMER PORTAL</p>
+
+        <h1>My Vehicles & Service Booking</h1>
+
+        <section class="portal-card">
+
+            <h2>Add a Vehicle</h2>
+
+            <form id="vehicleForm" class="portal-form">
+
+                <label>
+                    Vehicle Registration Number
+
+                    <input
+                        id="vehicleNumber"
+                        type="text"
+                        required
+                        maxlength="20"
+                    >
+                </label>
+
+                <label>
+                    Vehicle Category
+
+                    <select id="vehicleType" required>
+                        <option value="Car">Car</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Superbike">Superbike</option>
+                    </select>
+                </label>
+
+                <label>
+                    Brand
+
+                    <input
+                        id="vehicleBrand"
+                        type="text"
+                        required
+                        maxlength="100"
+                    >
+                </label>
+
+                <label>
+                    Model
+
+                    <input
+                        id="vehicleModel"
+                        type="text"
+                        required
+                        maxlength="100"
+                    >
+                </label>
+
+                <label>
+                    Manufacture Year
+
+                    <input
+                        id="vehicleYear"
+                        type="number"
+                        min="1886"
+                        max="2100"
+                    >
+                </label>
+
+                <button class="portal-button" type="submit">
+                    Save Vehicle
+                </button>
+
+            </form>
+
+            <p
+                id="vehicleMessage"
+                class="portal-message"
+                role="status"
+            ></p>
+
+        </section>
+
+        <section class="portal-card">
+
+            <h2>Book a Service</h2>
+
+            <form id="bookingForm" class="portal-form">
+
+                <label>
+                    Select Your Vehicle
+
+                    <select id="bookingVehicle" required>
+                        <option value="">Loading vehicles...</option>
+                    </select>
+                </label>
+
+                <label>
+                    Select Service
+
+                    <select id="bookingService" required disabled>
+                        <option value="">Select a vehicle first</option>
+                    </select>
+                </label>
+
+                <label>
+                    Appointment Date
+
+                    <input
+                        id="appointmentDate"
+                        type="date"
+                        required
+                    >
+                </label>
+
+                <label>
+                    Appointment Time
+
+                    <input
+                        id="appointmentTime"
+                        type="time"
+                        required
+                    >
+                </label>
+
+                <button class="portal-button" type="submit">
+                    Book Service
+                </button>
+
+            </form>
+
+            <p
+                id="bookingMessage"
+                class="portal-message"
+                role="status"
+            ></p>
+
+        </section>
+
+        <section class="portal-card">
+
+            <h2>My Vehicles</h2>
+
+            <div id="myVehicles">
+                Loading vehicles...
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="js/book-service.js" defer></script>
+
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+</html>

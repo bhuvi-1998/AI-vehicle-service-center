@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Estimates</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+
+    <h1>Service Estimate Management</h1>
+
+    <p id="requirementMessage"></p>
+    <p id="message"></p>
+
+    <form id="estimateForm" hidden>
+
+        <h2>Create Service Estimate</h2>
+
+        <label for="appointment_id">Appointment:</label>
+        <br>
+
+        <select id="appointment_id" required>
+            <option value="">Select Appointment</option>
+        </select>
+
+        <br><br>
+
+        <h3>Parts to Include</h3>
+
+        <div id="partsContainer"></div>
+
+        <br>
+
+        <label for="notes">Notes:</label>
+        <br>
+
+        <textarea id="notes" rows="4" cols="40"></textarea>
+
+        <br><br>
+
+        <button type="submit">Create Estimate</button>
+
+    </form>
+
+    <hr>
+
+    <h2>Saved Estimates</h2>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>Estimate ID</th>
+                <th>Appointment ID</th>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Estimated Total</th>
+                <th>Date Created</th>
+                <th>PDF</th>
+            </tr>
+        </thead>
+
+        <tbody id="estimateTable"></tbody>
+
+    </table>
+
+    <br>
+
+    <a href="admin.html">Back to Admin</a>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/estimate.js"></script>
+
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+
+</html>

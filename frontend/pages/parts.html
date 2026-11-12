@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Parts Management | Vehicle Service Center</title>
+
+    <link rel="stylesheet" href="../css/admin-style.css">
+
+    <style>
+        /* Keep the page within the mobile screen */
+        body {
+            box-sizing: border-box;
+            max-width: 100%;
+            min-width: 0;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2 {
+            overflow-wrap: anywhere;
+        }
+
+        /* Form layout */
+        #partForm {
+            max-width: 600px;
+        }
+
+        #partForm input,
+        #partForm select {
+            box-sizing: border-box;
+            max-width: 100%;
+            padding: 10px;
+        }
+
+        #partForm input {
+            width: 100%;
+        }
+
+        #partForm select {
+            width: 100%;
+        }
+
+        #partForm button {
+            margin: 4px 6px 4px 0;
+        }
+
+        #message {
+            overflow-wrap: anywhere;
+        }
+
+        /* Dedicated horizontal scrolling area */
+        .parts-table-container {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #3A414B;
+            border-radius: 8px;
+            background: #252A31;
+            scrollbar-width: auto;
+            scrollbar-color: #F36B21 #252A31;
+        }
+
+        /* Keep enough width for every inventory column */
+        .parts-table-container table {
+            display: table !important;
+            width: 100%;
+            min-width: 760px;
+            max-width: none;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        .parts-table-container th,
+        .parts-table-container td {
+            padding: 12px 14px;
+            text-align: left;
+            border: 1px solid #3A414B;
+            white-space: nowrap;
+        }
+
+        .parts-table-container th {
+            background: #1C1F24;
+            color: #FF8A4C;
+        }
+
+        .parts-table-container td {
+            color: #F5F5F5;
+        }
+
+        .parts-table-container tbody tr:nth-child(even) {
+            background: #30363F;
+        }
+
+        .parts-table-container tbody tr:hover {
+            background: #383E47;
+        }
+
+        /* Make the scrolling area easier to identify on phones */
+        .table-scroll-hint {
+            margin: 8px 0 12px;
+            color: #B8BEC7;
+            font-size: 13px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 18px 0;
+            color: #FF8A4C;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .parts-table-container th,
+            .parts-table-container td {
+                padding: 10px;
+            }
+
+            #partForm button {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Parts Management</h1>
+
+    <form id="partForm">
+
+        <input type="hidden" id="part_id">
+
+        <label for="part_name">
+            Part Name:
+        </label>
+        <br>
+
+        <input
+            type="text"
+            id="part_name"
+            required
+            maxlength="100"
+        >
+
+        <br><br>
+
+        <label for="vehicle_type">
+            Vehicle Category:
+        </label>
+        <br>
+
+        <select
+            id="vehicle_type"
+            name="vehicle_type"
+            required
+        >
+            <option value="All">All</option>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Superbike">Superbike</option>
+        </select>
+
+        <br><br>
+
+        <label for="part_number">
+            Part Number:
+        </label>
+        <br>
+
+        <input
+            type="text"
+            id="part_number"
+            required
+            maxlength="100"
+        >
+
+        <br><br>
+
+        <label for="quantity">
+            Quantity:
+        </label>
+        <br>
+
+        <input
+            type="number"
+            id="quantity"
+            min="0"
+            step="1"
+            required
+        >
+
+        <br><br>
+
+        <label for="price">
+            Price:
+        </label>
+        <br>
+
+        <input
+            type="number"
+            id="price"
+            min="0"
+            step="0.01"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Save Part
+        </button>
+
+        <button
+            type="button"
+            id="cancelButton"
+            hidden
+        >
+            Cancel
+        </button>
+
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <hr>
+
+    <h2>Parts Inventory</h2>
+
+    <p class="table-scroll-hint">
+        On a small screen, swipe left or right inside the inventory table
+        to view all columns.
+    </p>
+
+    <div
+        class="parts-table-container"
+        tabindex="0"
+        role="region"
+        aria-label="Parts inventory table. Scroll horizontally to see all columns."
+    >
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Part ID</th>
+                    <th>Part Name</th>
+                    <th>Vehicle Category</th>
+                    <th>Part Number</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="partTable">
+                <!-- Real inventory records are loaded by parts.js -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <a class="back-link" href="admin.html">
+        Back to Admin
+    </a>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/parts.js"></script>
+
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+
+</html>

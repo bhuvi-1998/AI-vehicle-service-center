@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vehicle Management | Vehicle Service Center</title>
+
+    <link rel="stylesheet" href="../css/admin-style.css">
+
+    <style>
+        /* Keep the page itself within the mobile viewport. */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2 {
+            overflow-wrap: anywhere;
+        }
+
+        /* Vehicle form */
+        #vehicleForm {
+            width: 100%;
+            max-width: 600px;
+            min-width: 0;
+        }
+
+        #vehicleForm label {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        #vehicleForm input,
+        #vehicleForm select {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            min-height: 40px;
+            padding: 10px;
+        }
+
+        #vehicleForm button {
+            margin: 4px 6px 4px 0;
+        }
+
+        #customerMessage,
+        #message {
+            overflow-wrap: anywhere;
+        }
+
+        /* Vehicle list: the table scrolls inside this container. */
+        .vehicle-table-container {
+            display: block;
+            position: relative;
+            width: 100%;
+            min-width: 0;
+            max-width: 100%;
+            overflow-x: auto !important;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain;
+            touch-action: pan-x pan-y;
+            border: 1px solid #3A414B;
+            border-radius: 8px;
+            background: #252A31;
+            scrollbar-width: auto;
+            scrollbar-color: #F36B21 #252A31;
+        }
+
+        .vehicle-table-container table {
+            display: table !important;
+            width: max-content !important;
+            min-width: 1150px;
+            max-width: none !important;
+            table-layout: auto;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        .vehicle-table-container th,
+        .vehicle-table-container td {
+            padding: 12px 14px;
+            border: 1px solid #3A414B;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .vehicle-table-container th {
+            background: #1C1F24;
+            color: #FF8A4C;
+        }
+
+        .vehicle-table-container td {
+            color: #F5F5F5;
+        }
+
+        .vehicle-table-container tbody tr:nth-child(even) {
+            background: #30363F;
+        }
+
+        .vehicle-table-container tbody tr:hover {
+            background: #383E47;
+        }
+
+        .table-scroll-hint {
+            margin: 8px 0 12px;
+            color: #B8BEC7;
+            font-size: 13px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 18px 0;
+            color: #FF8A4C;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .vehicle-table-container th,
+            .vehicle-table-container td {
+                padding: 10px 12px;
+            }
+
+            #vehicleForm button {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Vehicle Management</h1>
+
+    <p id="customerMessage"></p>
+
+    <form id="vehicleForm" hidden>
+
+        <h2>Add Vehicle</h2>
+
+        <label for="customer_id">Customer:</label>
+        <br>
+
+        <select id="customer_id" name="customer_id" required>
+            <option value="">Select Customer</option>
+        </select>
+
+        <br><br>
+
+        <label for="vehicle_type">Vehicle Category:</label>
+        <br>
+
+        <select id="vehicle_type" name="vehicle_type" required>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Superbike">Superbike</option>
+        </select>
+
+        <br><br>
+
+        <label for="vehicle_number">Vehicle Number:</label>
+        <br>
+
+        <input
+            type="text"
+            id="vehicle_number"
+            name="vehicle_number"
+            required
+        >
+
+        <br><br>
+
+        <label for="brand">Brand:</label>
+        <br>
+
+        <input
+            type="text"
+            id="brand"
+            name="brand"
+            required
+        >
+
+        <br><br>
+
+        <label for="model">Model:</label>
+        <br>
+
+        <input
+            type="text"
+            id="model"
+            name="model"
+            required
+        >
+
+        <br><br>
+
+        <label for="manufacture_year">Manufacture Year:</label>
+        <br>
+
+        <input
+            type="number"
+            id="manufacture_year"
+            name="manufacture_year"
+        >
+
+        <br><br>
+
+        <button type="submit">Add Vehicle</button>
+
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <hr>
+
+    <h2>Vehicle List</h2>
+
+    <p class="table-scroll-hint">
+        On mobile, swipe left or right inside the vehicle table
+        to view all columns, including Actions.
+    </p>
+
+    <div
+        class="vehicle-table-container"
+        tabindex="0"
+        role="region"
+        aria-label="Vehicle list. Scroll horizontally to see all columns."
+    >
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Vehicle ID</th>
+                    <th>Customer ID</th>
+                    <th>Vehicle Number</th>
+                    <th>Vehicle Category</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Manufacture Year</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="vehicleTable">
+                <!-- Actual vehicle records are loaded by vehicle.js. -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <a class="back-link" href="admin.html">Back to Admin</a>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/vehicle.js"></script>
+
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+
+</html>

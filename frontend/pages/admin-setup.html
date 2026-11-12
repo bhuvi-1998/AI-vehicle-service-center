@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Admin Account</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+
+
+</head>
+
+<body>
+
+    <h1>Create Admin Account</h1>
+
+    <form id="adminForm">
+
+        <label for="admin_name">Admin Name:</label>
+        <br>
+        <input type="text" id="admin_name" required>
+
+        <br><br>
+
+        <label for="email">Email:</label>
+        <br>
+        <input type="email" id="email" required>
+
+        <br><br>
+
+        <label for="password">Password:</label>
+        <br>
+        <input type="password" id="password" required>
+
+        <br><br>
+
+        <button type="submit">Create Admin Account</button>
+
+    </form>
+
+    <p id="message"></p>
+
+    <br>
+
+    <a href="login.html">Go to Login</a>
+
+
+    <script src="../js/config.js"></script>
+    <script>
+
+        const adminForm = document.getElementById("adminForm");
+        const message = document.getElementById("message");
+
+
+        adminForm.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+
+            const adminData = {
+
+                admin_name:
+                    document.getElementById("admin_name").value,
+
+                email:
+                    document.getElementById("email").value,
+
+                password:
+                    document.getElementById("password").value
+            };
+
+
+            try {
+
+                const response = await fetch(
+                    `${window.API_BASE_URL}/admins`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(adminData)
+                    }
+                );
+
+
+                const result = await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.detail || "Unable to create admin account"
+                    );
+
+                }
+
+
+                message.textContent = result.message;
+
+                adminForm.reset();
+
+            }
+            catch (error) {
+
+                message.textContent = error.message;
+
+            }
+
+        });
+
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

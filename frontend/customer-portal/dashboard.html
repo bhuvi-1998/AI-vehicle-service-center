@@ -1,0 +1,352 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Dashboard | VehicleCare</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../chatbot/chatbot.css">
+
+    <style>
+        .dashboard {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .profile-card,
+        .dashboard-panel {
+            background: #0A192F;
+            border: 1px solid #263B55;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-card span {
+            display: block;
+            color: #A9B8CC;
+            margin-bottom: 10px;
+        }
+
+        .profile-card strong {
+            color: #FFD700;
+        }
+
+        .logout-button,
+        .profile-toggle,
+        .profile-form button {
+            padding: 11px 16px;
+            border: 0;
+            border-radius: 8px;
+            background: #FFD700;
+            color: #020B18;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .profile-toggle:hover,
+        .logout-button:hover,
+        .profile-form button:hover {
+            background: #E6C200;
+        }
+
+        .profile-edit-actions {
+            margin: 20px 0;
+        }
+
+        .profile-edit-panel[hidden] {
+            display: none !important;
+        }
+
+        .profile-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .profile-form label {
+            display: grid;
+            gap: 7px;
+            color: #F5F7FA;
+        }
+
+        .profile-form input,
+        .profile-form textarea {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            background: #061326;
+            color: white;
+            border: 1px solid #344963;
+            border-radius: 7px;
+            font: inherit;
+        }
+
+        .profile-form input:focus,
+        .profile-form textarea:focus {
+            outline: 2px solid #FFD700;
+            outline-offset: 1px;
+        }
+
+        .profile-form button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        #profileEditMessage {
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 600px) {
+            .dashboard {
+                margin: 20px auto;
+                padding: 14px;
+            }
+
+            .profile-card,
+            .dashboard-panel {
+                padding: 17px;
+            }
+
+            .profile-edit-actions button,
+            .profile-form button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="auth-body">
+
+    <header class="site-header">
+
+        <a class="brand" href="index.html">
+            <span class="brand-icon">VS</span>
+            <span>VEHICLE<span class="gold-text">CARE</span></span>
+        </a>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="services.html">Services</a>
+
+            <button
+                id="logoutButton"
+                class="logout-button"
+                type="button"
+            >
+                Log Out
+            </button>
+        </nav>
+
+    </header>
+
+    <main class="dashboard">
+
+        <p class="eyebrow">CUSTOMER ACCOUNT</p>
+
+        <h1>Welcome, <span id="customerName">...</span></h1>
+
+        <p id="dashboardMessage" role="status">
+            Loading your profile...
+        </p>
+
+        <!-- Customer profile summary -->
+        <section class="profile-grid">
+
+            <article class="profile-card">
+                <span>Customer ID</span>
+                <strong id="profileId">Loading...</strong>
+            </article>
+
+            <article class="profile-card">
+                <span>Email</span>
+                <strong id="profileEmail">Loading...</strong>
+            </article>
+
+            <article class="profile-card">
+                <span>Phone</span>
+                <strong id="profilePhone">Loading...</strong>
+            </article>
+
+        </section>
+
+        <section class="dashboard-panel">
+
+            <h2>Profile Details</h2>
+
+            <p>
+                <strong>Name: </strong>
+                <span id="profileName">Loading...</span>
+            </p>
+
+            <p>
+                <strong>Address: </strong>
+                <span id="profileAddress">Loading...</span>
+            </p>
+
+        </section>
+
+        <!-- Show the editor only when requested -->
+        <div class="profile-edit-actions">
+
+            <button
+                type="button"
+                id="toggleCustomerProfile"
+                class="profile-toggle"
+                aria-expanded="false"
+                aria-controls="customerProfilePanel"
+            >
+                Edit Profile
+            </button>
+
+        </div>
+
+        <!-- Hidden customer profile form -->
+        <section
+            class="dashboard-panel profile-edit-panel"
+            id="customerProfilePanel"
+            aria-labelledby="editCustomerHeading"
+            hidden
+        >
+
+            <h2 id="editCustomerHeading">Edit My Profile</h2>
+
+            <p>
+                Update your personal information. Leave the new password
+                blank to keep your current password.
+            </p>
+
+            <form id="customerProfileForm" class="profile-form">
+
+                <label for="editCustomerName">
+                    Full Name
+
+                    <input
+                        type="text"
+                        id="editCustomerName"
+                        required
+                        minlength="2"
+                        maxlength="100"
+                        autocomplete="name"
+                    >
+                </label>
+
+                <label for="editCustomerEmail">
+                    Email Address
+
+                    <input
+                        type="email"
+                        id="editCustomerEmail"
+                        required
+                        minlength="5"
+                        maxlength="254"
+                        autocomplete="email"
+                    >
+                </label>
+
+                <label for="editCustomerPhone">
+                    Phone Number
+
+                    <input
+                        type="tel"
+                        id="editCustomerPhone"
+                        required
+                        minlength="8"
+                        maxlength="15"
+                        autocomplete="tel"
+                    >
+                </label>
+
+                <label for="editCustomerAddress">
+                    Address
+
+                    <textarea
+                        id="editCustomerAddress"
+                        rows="3"
+                        maxlength="500"
+                        autocomplete="street-address"
+                    ></textarea>
+                </label>
+
+                <label for="editCustomerPassword">
+                    New Password (Optional)
+
+                    <input
+                        type="password"
+                        id="editCustomerPassword"
+                        minlength="8"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        placeholder="Leave blank to keep current password"
+                    >
+                </label>
+
+                <button
+                    type="submit"
+                    id="saveCustomerProfile"
+                >
+                    Save Profile
+                </button>
+
+            </form>
+
+            <p
+                id="profileEditMessage"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+        <!-- Existing vehicle service links -->
+        <section class="dashboard-panel">
+
+            <h2>Vehicle Service</h2>
+
+            <p>
+                Continue to the services page to view available services.
+            </p>
+
+            <p>
+                <a href="book-service.html">
+                    <u>Add Vehicle / Book Service</u>
+                </a>
+            </p>
+
+            <p>
+                <a href="my-appointments.html">
+                    <u>My Appointments</u>
+                </a>
+            </p>
+
+            <p>
+                <a href="track-repair.html">
+                    <u>Track Your Repair</u>
+                </a>
+            </p>
+
+            <a href="services.html">
+                <u>View Services</u>
+            </a>
+
+        </section>
+
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="js/dashboard.js" defer></script>
+    <script src="../chatbot/chatbot.js" defer></script>
+
+</body>
+</html>

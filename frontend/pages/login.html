@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Vehicle Service Center</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body class="admin-dashboard-body">
+
+    <main style="max-width: 500px; margin: 50px auto; padding: 20px;">
+
+        <h1>Vehicle Service Center</h1>
+        <h2>Admin Login</h2>
+
+        <form id="loginForm">
+
+            <label for="email">Email Address</label>
+            <br>
+
+            <input
+                type="email"
+                id="email"
+                autocomplete="username"
+                required
+                style="box-sizing:border-box;width:100%;padding:12px;"
+            >
+
+            <br><br>
+
+            <label for="password">Password</label>
+            <br>
+
+            <input
+                type="password"
+                id="password"
+                autocomplete="current-password"
+                required
+                style="box-sizing:border-box;width:100%;padding:12px;"
+            >
+
+            <br><br>
+
+            <button type="submit" id="loginButton">
+                Login
+            </button>
+
+        </form>
+
+        <p>
+            <a href="forgot-password.html">
+                Forgot Password?
+            </a>
+        </p>
+
+        <p id="message" role="status" aria-live="polite"></p>
+
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script>
+        const API_URL = window.API_BASE_URL;
+
+        const loginForm = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+        const loginButton = document.getElementById("loginButton");
+
+        loginForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            message.textContent = "";
+            loginButton.disabled = true;
+            loginButton.textContent = "Logging in...";
+
+            const loginData = {
+                email: document.getElementById("email").value.trim(),
+                password: document.getElementById("password").value
+            };
+
+            try {
+                const response = await fetch(
+                    `${API_URL}/admin/login`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(loginData)
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.detail || "Login failed.");
+                }
+
+                if (!result.access_token || result.role !== "admin") {
+                    throw new Error("The server did not return a valid admin login token.");
+                }
+
+                localStorage.setItem("access_token", result.access_token);
+                localStorage.setItem("admin_name", result.admin_name);
+                localStorage.setItem("admin_email", result.email);
+                localStorage.setItem("admin_role", result.role);
+
+                window.location.href = "admin.html";
+
+            } catch (error) {
+                message.textContent =
+                    error instanceof TypeError
+                        ? "Unable to connect to the server. Check that FastAPI is running."
+                        : error.message;
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = "Login";
+            }
+        });
+    </script>
+
+</body>
+</html>

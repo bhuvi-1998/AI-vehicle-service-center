@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments | VehicleCare</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .portal-container{max-width:1000px;margin:35px auto;padding:20px}
+        .appointment-card{background:#0A192F;border:1px solid #263B55;border-radius:12px;padding:22px;margin:16px 0;overflow-wrap:anywhere}
+        .appointment-card h2{color:#FFD700}
+        .appointment-status{font-weight:bold}
+    </style>
+</head>
+<body class="auth-body">
+<header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-icon">VS</span><span>VEHICLE<span class="gold-text">CARE</span></span></a>
+    <nav class="main-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="book-service.html">Book Service</a>
+        <a href="services.html">Services</a>
+    </nav>
+</header>
+<main class="portal-container">
+    <p class="eyebrow">CUSTOMER PORTAL</p>
+    <h1>My Appointments & Repair Status</h1>
+    <p id="appointmentsMessage" role="status">Loading appointments...</p>
+    <section id="appointmentsList"></section>
+    <p><a href="book-service.html">Book another service</a></p>
+</main>
+<script src="../js/config.js"></script>
+<script src="js/appointments.js" defer></script>
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+</html>

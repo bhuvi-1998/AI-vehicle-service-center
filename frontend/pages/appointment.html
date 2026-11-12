@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Appointment Management | Vehicle Service Center</title>
+
+    <link rel="stylesheet" href="../css/admin-style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            max-width: 100%;
+            min-width: 0;
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2 {
+            overflow-wrap: anywhere;
+        }
+
+        /* Keep the appointment form within the screen */
+        #appointmentForm {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        #appointmentForm label {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        #appointmentForm input,
+        #appointmentForm select {
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 100%;
+            min-height: 40px;
+            padding: 9px 10px;
+        }
+
+        #appointmentForm button {
+            margin: 4px 6px 4px 0;
+        }
+
+        #message,
+        #requirementMessage {
+            overflow-wrap: anywhere;
+        }
+
+        /* Horizontally scrollable appointment table */
+        .appointment-table-container {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain;
+            border: 1px solid #3A414B;
+            border-radius: 8px;
+            background: #252A31;
+            scrollbar-width: auto;
+            scrollbar-color: #F36B21 #252A31;
+        }
+
+        .appointment-table-container table {
+            display: table !important;
+            width: 100%;
+            min-width: 1050px;
+            max-width: none;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        .appointment-table-container th,
+        .appointment-table-container td {
+            padding: 12px 14px;
+            border: 1px solid #3A414B;
+            text-align: left;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .appointment-table-container th {
+            background: #1C1F24;
+            color: #FF8A4C;
+        }
+
+        .appointment-table-container td {
+            color: #F5F5F5;
+        }
+
+        .appointment-table-container tbody tr:nth-child(even) {
+            background: #30363F;
+        }
+
+        .appointment-table-container tbody tr:hover {
+            background: #383E47;
+        }
+
+        .table-scroll-hint {
+            margin: 8px 0 12px;
+            color: #B8BEC7;
+            font-size: 13px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 18px 0;
+            color: #FF8A4C;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .appointment-table-container th,
+            .appointment-table-container td {
+                padding: 10px;
+            }
+
+            #appointmentForm button {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Appointment Management</h1>
+
+    <p id="requirementMessage"></p>
+
+    <form id="appointmentForm" hidden>
+
+        <input type="hidden" id="appointment_id">
+
+        <h2>Book Appointment</h2>
+
+        <label for="customer_id">Customer:</label>
+        <br>
+
+        <select id="customer_id" required>
+            <option value="">Select Customer</option>
+        </select>
+
+        <br><br>
+
+        <label for="vehicle_id">Vehicle:</label>
+        <br>
+
+        <select id="vehicle_id" required>
+            <option value="">Select Vehicle</option>
+        </select>
+
+        <br><br>
+
+        <label for="service_id">Service:</label>
+        <br>
+
+        <select id="service_id" required>
+            <option value="">Select Service</option>
+        </select>
+
+        <br><br>
+
+        <label for="technician_id">Technician:</label>
+        <br>
+
+        <select id="technician_id">
+            <option value="">Not Assigned</option>
+        </select>
+
+        <br><br>
+
+        <label for="appointment_date">Appointment Date:</label>
+        <br>
+
+        <input
+            type="date"
+            id="appointment_date"
+            required
+        >
+
+        <br><br>
+
+        <label for="appointment_time">Appointment Time:</label>
+        <br>
+
+        <input
+            type="time"
+            id="appointment_time"
+            required
+        >
+
+        <br><br>
+
+        <label for="status">Status:</label>
+        <br>
+
+        <select id="status" required>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Vehicle Received">Vehicle Received</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Ready for Pickup">Ready for Pickup</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            Save Appointment
+        </button>
+
+        <button
+            type="button"
+            id="cancelButton"
+            hidden
+        >
+            Cancel
+        </button>
+
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <hr>
+
+    <h2>Appointments</h2>
+
+    <p class="table-scroll-hint">
+        On mobile, swipe left or right inside the appointment table
+        to view all columns and actions.
+    </p>
+
+    <div
+        class="appointment-table-container"
+        tabindex="0"
+        role="region"
+        aria-label="Appointments table. Scroll horizontally to see all columns."
+    >
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Appointment ID</th>
+                    <th>Customer</th>
+                    <th>Vehicle</th>
+                    <th>Service</th>
+                    <th>Technician</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="appointmentTable">
+                <!-- Actual appointment records are loaded by appointment.js -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <a class="back-link" href="admin.html">
+        Back to Admin
+    </a>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/appointment.js"></script>
+
+    <script src="../chatbot/chatbot.js" defer></script>
+</body>
+</html>
