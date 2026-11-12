@@ -37,3 +37,26 @@ Thumbs.db
 
 # Local .bak backup files
 *.bak
+
+# Vite configuration timestamps
+vite.config.js.timestamp-*.mjs
+vite.config.mjs.timestamp-*.mjs
+vite.config.cjs.timestamp-*.mjs
+vite.config.ts.timestamp-*.mjs
+vite.config.mts.timestamp-*.mjs
+vite.config.cts.timestamp-*.mjs
+
+# Vitest configuration timestamps
+vitest.config.js.timestamp-*.mjs
+vitest.config.mjs.timestamp-*.mjs
+vitest.config.cjs.timestamp-*.mjs
+vitest.config.ts.timestamp-*.mjs
+vitest.config.mts.timestamp-*.mjs
+vitest.config.cts.timestamp-*.mjs
+
+# Preserve independent repository
+/servicehub-manager/
+
+# Additional backup files
+*.pre-edit-backup
+*.before-*
