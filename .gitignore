@@ -1,9 +1,39 @@
+
+# ==============================
+# Node.js
+# ==============================
+node_modules/
+dist/
+build/
+
 # Environment variables and secrets
 .env
 .env.*
 !.env.example
 
+# ==============================
+# Vite configuration timestamps
+# ==============================
+vite.config.js.timestamp-*.mjs
+vite.config.mjs.timestamp-*.mjs
+vite.config.cjs.timestamp-*.mjs
+vite.config.ts.timestamp-*.mjs
+vite.config.mts.timestamp-*.mjs
+vite.config.cts.timestamp-*.mjs
+
+# ==============================
+# Vitest configuration timestamps
+# ==============================
+vitest.config.js.timestamp-*.mjs
+vitest.config.mjs.timestamp-*.mjs
+vitest.config.cjs.timestamp-*.mjs
+vitest.config.ts.timestamp-*.mjs
+vitest.config.mts.timestamp-*.mjs
+vitest.config.cts.timestamp-*.mjs
+
+# ==============================
 # Python cache files
+# ==============================
 __pycache__/
 *.py[cod]
 
@@ -12,51 +42,36 @@ __pycache__/
 venv/
 env/
 
-# Testing
+# Python testing
 .pytest_cache/
 .coverage
 htmlcov/
 
-# VS Code settings
+# ==============================
+# Editors
+# ==============================
 .vscode/
 
-# Windows and macOS files
+# ==============================
+# Operating systems
+# ==============================
 Thumbs.db
 .DS_Store
+
+# ==============================
 # Development backups
+# ==============================
 *.backup_*
-
-# Local pre-change snapshots
-*.before_*
-
-# Temporary documentation generator
-/prepare_project_docs.py
-
-# All local backup copies
 *.backup*
-
-# Local .bak backup files
+*.before_*
+*.before-*
 *.bak
+*.pre-edit-backup
 
-# Vite configuration timestamps
-vite.config.js.timestamp-*.mjs
-vite.config.mjs.timestamp-*.mjs
-vite.config.cjs.timestamp-*.mjs
-vite.config.ts.timestamp-*.mjs
-vite.config.mts.timestamp-*.mjs
-vite.config.cts.timestamp-*.mjs
-
-# Vitest configuration timestamps
-vitest.config.js.timestamp-*.mjs
-vitest.config.mjs.timestamp-*.mjs
-vitest.config.cjs.timestamp-*.mjs
-vitest.config.ts.timestamp-*.mjs
-vitest.config.mts.timestamp-*.mjs
-vitest.config.cts.timestamp-*.mjs
+# ==============================
+# Local documentation generator
+# ==============================
+/prepare_project_docs.py
 
 # Preserve independent repository
 /servicehub-manager/
-
-# Additional backup files
-*.pre-edit-backup
-*.before-*
